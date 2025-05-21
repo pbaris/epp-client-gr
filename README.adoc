@@ -53,6 +53,35 @@ dependencies {
 }
 ----
 
+== Build from source
+
+To build from source, you must either skip the tests or provide a test application.properties file with the required configuration properties.
+
+.test/resources/application.properties
+[source,properties]
+----
+epp.use-sandbox=true
+epp.client-id=<your-client-id>
+epp.password=<your-password>
+epp.cl-tr-id=211119810900
+----
+
+== Usage
+
+=== Properties
+
+.application.properties
+[source,properties]
+----
+epp.use-sandbox=false
+epp.client-id=<your-client-id>
+epp.password=<your-password>
+----
+
+=== EppClient
+
+Inject/Autowire the EppClient to your code.
+
 == Implementation Status
 
 The Registry functions as defined by the EPP protocol standards (RFC3730, RFC3731, RFC3732, RFC3733, RFC3734, RFC3735), and their implementation statuses are listed.
