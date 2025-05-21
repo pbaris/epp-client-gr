@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd">
+	<command>
+		<update>
+			<contact:update xmlns:contact="urn:ietf:params:xml:ns:contact-1.0"
+							xsi:schemaLocation="urn:ietf:params:xml:ns:contact-1.0 contact-1.0.xsd">
+				<contact:id>714_epp-client-r</contact:id>
+				<contact:chg>
+					<contact:postalInfo type="loc">
+						<contact:addr>
+							<contact:street>Solonos 23</contact:street>
+							<contact:city>Heraklion</contact:city>
+							<contact:sp>Crete</contact:sp>
+							<contact:pc>71408</contact:pc>
+							<contact:cc>gr</contact:cc>
+						</contact:addr>
+					</contact:postalInfo>
+					<contact:voice>+30.2810320531</contact:voice>
+				</contact:chg>
+			</contact:update>
+		</update>
+		<clTRID>UPDATE-211119810900</clTRID>
+	</command>
+</epp>

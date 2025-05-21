@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd">
+	<command>
+		<update>
+			<host:update xmlns:host="urn:ietf:params:xml:ns:host-1.0" xsi:schemaLocation="urn:ietf:params:xml:ns:host-1.0 host-1.0.xsd">
+				<host:name>ns3.epp-client.gr</host:name>
+				<host:add>
+					<host:addr ip="v4">100.100.100.113</host:addr>
+				</host:add>
+				<host:rem>
+					<host:addr ip="v4">122.122.122.122</host:addr>
+					<host:addr ip="v6">1080:0:0:0:8:800:200C:417A</host:addr>
+				</host:rem>
+				<host:chg>
+					<host:name>ns12.epp-client.gr</host:name>
+				</host:chg>
+			</host:update>
+		</update>
+		<clTRID>UPDATE-211119810900</clTRID>
+	</command>
+</epp>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<epp xmlns="urn:ietf:params:xml:ns:epp-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd">
+	<response>
+		<result code="2002">
+			<msg>Λάθος χρήση της εντολής</msg>
+		</result>
+		<extension>
+			<extdomain:resData xmlns:extdomain="urn:ics-forth:params:xml:ns:extdomain-1.3"
+							   xsi:schemaLocation="urn:ics-forth:params:xml:ns:extdomain-1.3 extdomain-1.3.xsd">
+				<extdomain:comment>Αιτήματα αλλαγής καταχωρητή μπορούν να γίνουν μόνο σε ονόματα που δε βρίσκονται στη διαχείρισή σας.
+				</extdomain:comment>
+			</extdomain:resData>
+		</extension>
+		<trID>
+			<clTRID>TRANSFER-211119810900</clTRID>
+			<svTRID>5b8b78e3-66eb-4b78-ba0f-a04559390848</svTRID>
+		</trID>
+	</response>
+</epp>
