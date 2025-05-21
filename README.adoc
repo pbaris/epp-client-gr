@@ -1,0 +1,115 @@
+= epp-client-gr
+
+include::docs/logo.png["EPP Client",width="200"]
+
+<img src="docs/logo.png" width="200" alt="EPP Client"/>
+
+The project provides a client application based on the Extensible Provisioning Protocol (EPP), which can be used to interface with the Internet Registry of .gr and .ελ domain names, allowing the integrated management of Registry entities such as domain names, contacts, hosts and registrars.
+
+== Installation
+
+Add Netmechanics public repository and the dependency to your project
+
+=== Netmechanics Repository
+.pom.xml
+[source,xml]
+----
+<repositories>
+    <repository>
+        <id>netmechanics-public</id>
+        <url>https://nexus.nmlabs.gr/repository/m2public/</url>
+    </repository>
+</repositories>
+----
+
+.build.gradle
+[source,gradle]
+----
+repositories {
+    maven {
+        name = "netmechanics-public"
+        url = 'https://nexus.nmlabs.gr/repository/m2public/'
+    }
+}
+----
+
+=== Dependency
+
+.pom.xml
+[source,xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>gr.netmechanics</groupId>
+        <artifactId>epp-client-gr</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+----
+
+.build.gradle
+[source,gradle]
+----
+dependencies {
+    implementation 'gr.netmechanics:epp-client-gr:1.0.0'
+}
+----
+
+== Implementation Status
+
+The Registry functions as defined by the EPP protocol standards (RFC3730, RFC3731, RFC3732, RFC3733, RFC3734, RFC3735), and their implementation statuses are listed.
+
+*Implementation statuses*
+
+* ✅ ⇒ Implemented
+* ⬜ ⇒ Not yet implemented
+* 🛑 ⇒ Not defined
+* 🚫 ⇒ Not allowed/supported by the Registry
+* 🚧 ⇒ Under implementation
+
+=== Session Management Commands (RFC3730)
+
+* ✅ `<hello>` is used when starting communication with the EPP server or to renew an existing session.
+* ✅ `<login>` creates a new session with the EPP server.
+* ✅ `<login>` to change the user password.
+* ✅ `<logout>` terminates the existing session with the EPP server.
+
+=== Domain Names Management commands (RFC3731)
+
+* ✅ `<check>` is used to check the existence (availability) of one or more domain names.
+* ✅ `<info>` is used to retrieve the full details of a domain name (under certain conditions).
+* ✅ `<create>` is used to create a domain name or activate a reserved domain name.
+* 🚧 `<update>` is used for changes to the details of a domain name.
+* ✅ `<renew>` is used to renew the registration period of a domain name.
+* ✅ `<delete>` is used to delete a domain name, a reserved domain name, or to revoke the creation of a domain name.
+* ✅ `<transfer>` is used to change the registrar of a domain name.
+* 🚫 `<poll>` is not supported by the Registry.
+
+=== Name Servers Management Commands (RFC3732)
+
+* ✅ `<check>` is used to check the existence (availability) of a name server.
+* ✅ `<info>` is used to retrieve the details of a naming server.
+* ✅ `<create>` is used to create a name server.
+* ✅ `<update>` is used for changes to the details of a name server.
+* 🛑 `<renew>` not defined for name servers (RFC3732).
+* ✅ `<delete>` is used to delete a name server (under certain conditions).
+* 🛑 `<transfer>` not defined for name servers (RFC3732).
+
+=== Contact Management Commands (RFC3733)
+* ✅ `<check>` is used to check the existence (availability) of a contact.
+* ✅ `<info>` is used to retrieve the details of a contact.
+* ✅ `<create>` is used to create a new contact.
+* ✅ `<update>` is used for changes to the details of a contact.
+* 🛑 `<renew>` not defined for contact objects (RFC3733).
+* 🚫 `<delete>` is not allowed by the Registry.
+* 🚫 `<transfer>` is not supported by the Registry.
+
+=== Registrar Account Management Commands
+
+* 🛑 `<check>` is not defined for registrar accounts.
+* ⬜ `<info>` is used to retrieve the data of a registrar account.
+* 🛑 `<create>` is not defined for registrar accounts.
+* 🛑 `<update>` is not defined for registrar accounts.
+* 🛑 `<renew>` is not defined for registrar accounts.
+* 🛑 `<delete>` is not defined for registrar accounts.
+* 🛑 `<transfer>` is not defined for registrar accounts.
