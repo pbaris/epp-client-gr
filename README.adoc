@@ -5,7 +5,7 @@ image:https://img.shields.io/github/license/pbaris/epp-client-gr?cacheSeconds=86
 
 image::docs/logo.png["EPP Client", width=200]
 
-The project provides a client application based on the Extensible Provisioning Protocol (EPP), which can be used to interface with the Internet Registry of .gr and .ελ domain names, allowing the integrated management of Registry entities such as domain names, contacts, hosts and registrars.
+A Spring library that provides a client based on the Extensible Provisioning Protocol (EPP), which can be used to interface with the Internet Registry of .gr and .ελ domain names, allowing the management of Registry entities such as domain names, contacts, hosts and registrars.
 
 == Installation
 
