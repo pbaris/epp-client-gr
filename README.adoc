@@ -1,7 +1,7 @@
 = epp-client-gr
 
 image:https://img.shields.io/github/v/release/pbaris/epp-client-gr?label=version[GitHub Version]
-image:https://img.shields.io/github/license/pbaris/epp-client-gr[License]
+image:https://img.shields.io/github/license/pbaris/epp-client-gr[GitHub License]
 
 image::docs/logo.png["EPP Client", width=200]
 
