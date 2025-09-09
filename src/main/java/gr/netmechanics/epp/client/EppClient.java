@@ -78,9 +78,7 @@ public class EppClient {
     @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     public EppCommandResponse logout() {
         EppCommandResponse cmd = sendCommandRequest(request(new LogoutRequest(), eppProps.getClTrId()));
-        sessionExpiresAt = null;
-        greeting = null;
-        sharedHeaders.clear();
+        clear();
         return cmd;
     }
 
@@ -274,7 +272,7 @@ public class EppClient {
 
     private EppCommandResponse sendCommandRequest(@NonNull final EppCommandRequest command) {
         if (isSessionValid()) {
-            sessionExpiresAt = Instant.now().plusSeconds(14 * 60);
+            sessionExpiresAt = Instant.now().plusSeconds(13 * 60);
         }
 
         return eppGateway.sendCommand(command);
@@ -297,6 +295,8 @@ public class EppClient {
     }
 
     private boolean connect() {
+        clear();
+
         Greeting greet = getGreeting();
 
         String language = eppProps.getLanguage();
@@ -326,6 +326,12 @@ public class EppClient {
         }
 
         return greeting;
+    }
+
+    private void clear() {
+        sessionExpiresAt = null;
+        greeting = null;
+        sharedHeaders.clear();
     }
 
     @Autowired

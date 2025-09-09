@@ -1,14 +1,14 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-	id 'java'
+    id 'java'
     id 'maven-publish'
     id 'org.springframework.boot' version '3.4.5' apply false
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'gr.netmechanics'
-version = '1.0.0'
+version = '1.0.1'
 
 dependencyManagement {
     imports {
@@ -17,38 +17,38 @@ dependencyManagement {
 }
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenLocal()
-	mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.integration:spring-integration-http'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.integration:spring-integration-http'
 
-	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-	implementation 'com.fasterxml.woodstox:woodstox-core:7.1.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.woodstox:woodstox-core:7.1.0'
     implementation 'com.github.javadev:underscore21:1.68'
     implementation 'commons-validator:commons-validator:1.9.0'
 
     compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.platform:junit-platform-suite'
 }
 
@@ -91,6 +91,6 @@ project.tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
     include '**/EppClientTestSuite.class'
 }
