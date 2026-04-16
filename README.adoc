@@ -3,7 +3,7 @@
 image:https://img.shields.io/github/v/release/pbaris/epp-client-gr?label=version&cacheSeconds=86400[GitHub Version]
 image:https://img.shields.io/github/license/pbaris/epp-client-gr?cacheSeconds=86400[GitHub License]
 
-image::docs/logo2.png["EPP Client", width=200]
+image::docs/logo3.png["EPP Client", width=200]
 
 A Spring library that provides a client based on the Extensible Provisioning Protocol (EPP), which can be used to interface with the Internet Registry of .gr and .ελ domain names, allowing the management of Registry entities such as domain names, contacts, hosts and registrars.
 
