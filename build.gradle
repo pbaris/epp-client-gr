@@ -73,6 +73,28 @@ publishing {
             artifactId = 'epp-client-gr'
             version = project.version
             from components.java
+            pom {
+                name = 'epp-client-gr'
+                description = 'EPP client library for the .gr domain registry'
+                url = 'https://github.com/pbaris/epp-client-gr'
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/pbaris/epp-client-gr.git'
+                    developerConnection = 'scm:git:ssh://github.com/pbaris/epp-client-gr.git'
+                    url = 'https://github.com/pbaris/epp-client-gr'
+                }
+                developers {
+                    developer {
+                        id = 'pbaris'
+                        name = 'Panos Bariamis'
+                    }
+                }
+            }
         }
     }
 }
