@@ -1,0 +1,9 @@
+[versions]
+woodstox = "7.1.0"
+underscore = "1.68"
+commons-validator = "1.9.0"
+
+[libraries]
+woodstox-core = { module = "com.fasterxml.woodstox:woodstox-core", version.ref = "woodstox" }
+underscore = { module = "com.github.javadev:underscore21", version.ref = "underscore" }
+commons-validator = { module = "commons-validator:commons-validator", version.ref = "commons-validator" }
