@@ -39,9 +39,9 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'com.fasterxml.woodstox:woodstox-core:7.1.0'
-    implementation 'com.github.javadev:underscore21:1.68'
-    implementation 'commons-validator:commons-validator:1.9.0'
+    implementation libs.woodstox.core
+    implementation libs.underscore
+    implementation libs.commons.validator
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -74,8 +74,10 @@ publishing {
         }
     }
     publications {
-        javaMaven(MavenPublication) {
+        create("javaMaven", MavenPublication) {
+            groupId = project.group
             artifactId = 'epp-client-gr'
+            version = project.version
             from components.java
         }
     }
@@ -86,11 +88,18 @@ tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
 }
 
-project.tasks.withType(JavaCompile).configureEach {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add("-parameters")
 }
 
-tasks.named('test') {
+// Test configuration
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
+
+    // Support both -PskipTests=true and -DskipTests=true
+    def skip = project.findProperty("skipTests")?.toString()?.toBoolean() || Boolean.getBoolean("skipTests")
+
+    onlyIf { !skip }
+
     include '**/EppClientTestSuite.class'
 }
