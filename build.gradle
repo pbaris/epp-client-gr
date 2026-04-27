@@ -20,6 +20,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    withSourcesJar()
+    withJavadocJar()
 }
 
 configurations {
@@ -52,14 +54,6 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-suite'
 }
 
-java {
-    withSourcesJar()
-}
-
-artifacts {
-    archives sourcesJar
-}
-
 publishing {
     repositories {
         if (project.hasProperty("nexus_username")) {
@@ -81,11 +75,6 @@ publishing {
             from components.java
         }
     }
-}
-
-// remove after https://youtrack.jetbrains.com/issue/IDEA-227215 is fixed
-tasks.withType(GenerateModuleMetadata).configureEach {
-    enabled = false
 }
 
 tasks.withType(JavaCompile).configureEach {
