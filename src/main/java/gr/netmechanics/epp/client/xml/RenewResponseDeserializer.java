@@ -4,9 +4,6 @@ import gr.netmechanics.epp.client.impl.EppResponse;
 import gr.netmechanics.epp.client.impl.commands.renew.RenewResponse;
 import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewResponse;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class RenewResponseDeserializer extends AbstractResponseDeserializer<RenewResponse> {
 
     @Override

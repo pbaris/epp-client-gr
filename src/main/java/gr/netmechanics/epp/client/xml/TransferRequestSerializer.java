@@ -10,9 +10,6 @@ import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import gr.netmechanics.epp.client.impl.commands.transfer.TransferRequest;
 import gr.netmechanics.epp.client.impl.commands.transfer.domain.DomainTransferRequest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class TransferRequestSerializer extends JsonSerializer<TransferRequest> {
 
     @Override

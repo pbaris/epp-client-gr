@@ -19,9 +19,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Component
 public class XmlUtil {
 

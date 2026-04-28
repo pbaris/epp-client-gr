@@ -4,9 +4,6 @@ import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 import org.junit.platform.suite.api.SuiteDisplayName;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Suite
 @SuiteDisplayName("EPP Client Tests")
 @SelectClasses({

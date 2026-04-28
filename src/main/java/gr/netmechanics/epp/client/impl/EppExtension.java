@@ -5,9 +5,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gr.netmechanics.epp.client.impl.elements.Comment;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public interface EppExtension {
 
     @JsonIgnore

@@ -9,9 +9,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import gr.netmechanics.epp.client.impl.elements.Address;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class AddressSerializer extends PrefixedJsonSerializer<Address> {
 
     @Override

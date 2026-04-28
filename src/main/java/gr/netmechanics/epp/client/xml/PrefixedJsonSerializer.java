@@ -7,9 +7,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Slf4j
 public abstract class PrefixedJsonSerializer<T> extends JsonSerializer<T> {
 

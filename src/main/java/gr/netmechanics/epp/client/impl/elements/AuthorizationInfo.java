@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Setter(AccessLevel.PRIVATE)
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

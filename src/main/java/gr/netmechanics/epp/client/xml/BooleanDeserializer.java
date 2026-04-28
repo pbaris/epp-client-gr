@@ -6,9 +6,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class BooleanDeserializer extends JsonDeserializer<Boolean> {
     @Override
     public Boolean deserialize(final JsonParser p, final DeserializationContext ctx) throws IOException {

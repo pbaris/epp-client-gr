@@ -4,9 +4,6 @@ import gr.netmechanics.epp.client.impl.EppResponse;
 import gr.netmechanics.epp.client.impl.commands.transfer.TransferResponse;
 import gr.netmechanics.epp.client.impl.commands.transfer.domain.DomainTransferResponse;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class TransferResponseDeserializer extends AbstractResponseDeserializer<TransferResponse> {
 
     @Override

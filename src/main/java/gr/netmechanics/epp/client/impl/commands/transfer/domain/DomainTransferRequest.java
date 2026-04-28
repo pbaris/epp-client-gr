@@ -16,9 +16,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

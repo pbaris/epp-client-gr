@@ -5,9 +5,6 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EppResultCodes {
 

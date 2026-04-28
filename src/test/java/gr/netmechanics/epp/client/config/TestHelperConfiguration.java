@@ -5,9 +5,6 @@ import gr.netmechanics.epp.client.util.XmlUtil;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @TestConfiguration
 public class TestHelperConfiguration {
     @Bean

@@ -2,9 +2,6 @@ package gr.netmechanics.epp.client;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @RequiredArgsConstructor
 public class EppPropertiesDefaultProvider implements EppPropertiesProvider {
 

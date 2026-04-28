@@ -5,9 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.integration.transformer.AbstractPayloadTransformer;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Slf4j
 @RequiredArgsConstructor
 public class ObjectToXMLTransformer extends AbstractPayloadTransformer<Object, String> {

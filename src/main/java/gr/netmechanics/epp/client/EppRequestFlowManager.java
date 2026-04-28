@@ -17,9 +17,6 @@ import org.springframework.integration.dsl.context.IntegrationFlowContext.Integr
 import org.springframework.integration.http.dsl.Http;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Service
 @RequiredArgsConstructor
 public class EppRequestFlowManager {

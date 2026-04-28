@@ -13,9 +13,6 @@ import com.fasterxml.jackson.core.io.IOContext;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.util.StaxUtil;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class NamespaceXmlFactory extends XmlFactory {
 
     public static final String NS_EPP = "urn:ietf:params:xml:ns:epp-1.0";

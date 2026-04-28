@@ -20,9 +20,6 @@ import gr.netmechanics.epp.client.impl.elements.ext.HasExtension;
 import gr.netmechanics.epp.client.xml.ExtensionSerializer;
 import lombok.Getter;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EppCommand {

@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @AutoConfiguration
 @ComponentScan(BASE_PACKAGE)
 @ConfigurationPropertiesScan(BASE_PACKAGE)

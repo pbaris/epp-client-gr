@@ -1,8 +1,5 @@
 package gr.netmechanics.epp.client;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public interface EppPropertiesProvider {
     boolean isUseSandbox();
 

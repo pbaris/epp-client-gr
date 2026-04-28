@@ -7,9 +7,6 @@ import gr.netmechanics.epp.client.impl.commands.info.contact.ContactInfoRequest;
 import gr.netmechanics.epp.client.impl.commands.info.domain.DomainInfoRequest;
 import gr.netmechanics.epp.client.impl.commands.info.host.HostInfoRequest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DomainInfoRequest.class, name = "domain:info"),

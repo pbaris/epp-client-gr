@@ -8,9 +8,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @TestMethodOrder(OrderAnnotation.class)
 class RefreshEppTest extends EppClientTestBase {
 

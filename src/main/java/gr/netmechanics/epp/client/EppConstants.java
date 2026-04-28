@@ -3,9 +3,6 @@ package gr.netmechanics.epp.client;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EppConstants {
 
@@ -21,6 +18,5 @@ public class EppConstants {
 
     public static final String URL_SANDBOX = "https://uat-regepp.ics.forth.gr:700/epp/proxy";
     public static final String URL_PRODUCTION = "https://regepp.ics.forth.gr:700/epp/proxy";
-
 
 }

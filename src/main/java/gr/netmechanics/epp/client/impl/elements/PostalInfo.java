@@ -16,9 +16,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Slf4j
 @Getter
 @Setter(AccessLevel.PRIVATE)

@@ -4,9 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import gr.netmechanics.epp.client.impl.EppRequest;
 import lombok.Getter;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 public class LogoutRequest implements EppRequest {
 

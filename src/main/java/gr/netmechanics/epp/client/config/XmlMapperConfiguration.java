@@ -22,9 +22,6 @@ import gr.netmechanics.epp.client.xml.PostalInfoSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Configuration
 public class XmlMapperConfiguration {
 

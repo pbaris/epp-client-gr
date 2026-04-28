@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Component
 @RequiredArgsConstructor
 public class EppRefreshListener {

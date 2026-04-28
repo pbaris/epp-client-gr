@@ -11,9 +11,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.Getter;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @JsonDeserialize(using = DomainStatus.StatusDeserializer.class)
 public enum DomainStatus {

@@ -7,9 +7,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import gr.netmechanics.epp.client.impl.elements.AuthorizationInfo;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class AuthorizationInfoSerializer extends PrefixedJsonSerializer<AuthorizationInfo> {
 
     @Override

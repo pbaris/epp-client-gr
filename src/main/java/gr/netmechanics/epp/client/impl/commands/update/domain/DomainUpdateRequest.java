@@ -23,9 +23,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)

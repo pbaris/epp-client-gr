@@ -10,9 +10,6 @@ import gr.netmechanics.epp.client.util.XmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @SpringBootTest(classes = {TestHelperConfiguration.class, EppClientAutoConfiguration.class})
 public abstract class EppClientTestBase {
 

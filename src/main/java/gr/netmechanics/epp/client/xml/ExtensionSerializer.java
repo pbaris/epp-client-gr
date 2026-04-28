@@ -13,9 +13,6 @@ import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainIssueTokenExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainTransferExtension;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class ExtensionSerializer<T extends EppExtension> extends JsonSerializer<T> {
 
     @Override

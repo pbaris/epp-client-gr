@@ -19,9 +19,6 @@ import gr.netmechanics.epp.client.impl.elements.ext.ContactExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.HostExtension;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class ExtensionDeserializer<T extends EppExtension> extends JsonDeserializer<T> {
 
     @Override

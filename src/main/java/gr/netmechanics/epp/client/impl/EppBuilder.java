@@ -8,9 +8,6 @@ import gr.netmechanics.epp.client.impl.elements.Contact;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public interface EppBuilder {
 
     <T> T build();

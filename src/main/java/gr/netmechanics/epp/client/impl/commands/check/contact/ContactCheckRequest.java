@@ -15,9 +15,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ContactCheckRequest implements ContactSchema, CheckRequest {

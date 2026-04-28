@@ -13,9 +13,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import gr.netmechanics.epp.client.impl.EppResponse;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public abstract class AbstractResponseDeserializer<T extends EppResponse> extends JsonDeserializer<T> {
 
     @Override

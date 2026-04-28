@@ -7,9 +7,6 @@ import gr.netmechanics.epp.client.impl.commands.check.contact.ContactCheckReques
 import gr.netmechanics.epp.client.impl.commands.check.domain.DomainCheckRequest;
 import gr.netmechanics.epp.client.impl.commands.check.host.HostCheckRequest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DomainCheckRequest.class, name = "domain:check"),

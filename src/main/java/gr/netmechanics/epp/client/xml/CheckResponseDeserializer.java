@@ -5,9 +5,6 @@ import gr.netmechanics.epp.client.impl.commands.check.contact.ContactCheckRespon
 import gr.netmechanics.epp.client.impl.commands.check.domain.DomainCheckResponse;
 import gr.netmechanics.epp.client.impl.commands.check.host.HostCheckResponse;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class CheckResponseDeserializer extends AbstractResponseDeserializer<CheckResponse> {
 
     @Override

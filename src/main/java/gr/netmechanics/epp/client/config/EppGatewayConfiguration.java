@@ -26,9 +26,6 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageBuilder;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Slf4j
 @Configuration
 @EnableIntegration

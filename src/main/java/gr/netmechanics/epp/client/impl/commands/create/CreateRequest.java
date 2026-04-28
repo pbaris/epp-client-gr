@@ -7,9 +7,6 @@ import gr.netmechanics.epp.client.impl.commands.create.contact.ContactCreateRequ
 import gr.netmechanics.epp.client.impl.commands.create.domain.DomainCreateRequest;
 import gr.netmechanics.epp.client.impl.commands.create.host.HostCreateRequest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DomainCreateRequest.class, name = "domain:create"),

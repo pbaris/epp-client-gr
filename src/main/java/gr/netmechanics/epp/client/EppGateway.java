@@ -9,9 +9,6 @@ import gr.netmechanics.epp.client.impl.commands.Hello;
 import gr.netmechanics.epp.client.impl.elements.Greeting;
 import org.springframework.integration.annotation.MessagingGateway;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @MessagingGateway(defaultRequestChannel = HTTP_REQUEST_CHANNEL)
 public interface EppGateway {
 

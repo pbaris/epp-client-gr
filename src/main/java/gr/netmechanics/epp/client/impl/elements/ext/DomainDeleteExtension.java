@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString

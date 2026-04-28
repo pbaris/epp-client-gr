@@ -7,9 +7,6 @@ import gr.netmechanics.epp.client.impl.commands.update.contact.ContactUpdateRequ
 import gr.netmechanics.epp.client.impl.commands.update.domain.DomainUpdateRequest;
 import gr.netmechanics.epp.client.impl.commands.update.host.HostUpdateRequest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DomainUpdateRequest.class, name = "domain:update"),

@@ -10,9 +10,6 @@ import gr.netmechanics.epp.client.impl.commands.renew.RenewRequest;
 import gr.netmechanics.epp.client.impl.commands.transfer.TransferRequest;
 import gr.netmechanics.epp.client.impl.commands.update.UpdateRequest;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public enum EppRequestType {
     INFO,
     CHECK,

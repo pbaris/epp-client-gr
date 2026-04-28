@@ -17,9 +17,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @TestMethodOrder(OrderAnnotation.class)
 class ContactTests extends EppClientTestBase {
 

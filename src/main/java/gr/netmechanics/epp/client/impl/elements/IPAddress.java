@@ -9,9 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString

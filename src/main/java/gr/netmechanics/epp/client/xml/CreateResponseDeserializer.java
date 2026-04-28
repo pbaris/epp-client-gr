@@ -5,9 +5,6 @@ import gr.netmechanics.epp.client.impl.commands.create.contact.ContactCreateResp
 import gr.netmechanics.epp.client.impl.commands.create.domain.DomainCreateResponse;
 import gr.netmechanics.epp.client.impl.commands.create.host.HostCreateResponse;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class CreateResponseDeserializer extends AbstractResponseDeserializer<CreateResponse> {
 
     @Override

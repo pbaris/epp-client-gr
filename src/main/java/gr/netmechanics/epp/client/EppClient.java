@@ -37,9 +37,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Slf4j
 @Component(BEAN_EPP_CLIENT)
 @RequiredArgsConstructor

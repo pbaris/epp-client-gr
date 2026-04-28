@@ -8,9 +8,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import gr.netmechanics.epp.client.impl.elements.PostalInfo;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 public class PostalInfoSerializer extends PrefixedJsonSerializer<PostalInfo> {
 
     @Override

@@ -17,9 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 @JsonPropertyOrder({ "name", "addressesToAdd", "addressesToRemove", "newName" })
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

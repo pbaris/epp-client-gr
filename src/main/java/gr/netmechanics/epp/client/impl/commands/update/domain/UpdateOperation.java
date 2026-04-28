@@ -2,9 +2,6 @@ package gr.netmechanics.epp.client.impl.commands.update.domain;
 
 import lombok.Getter;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Getter
 public enum UpdateOperation {
     CHANGE_OWNER("ownerChange"),

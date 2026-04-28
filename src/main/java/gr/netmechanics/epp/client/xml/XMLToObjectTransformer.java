@@ -21,9 +21,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.integration.transformer.AbstractPayloadTransformer;
 
-/**
- * @author Panos Bariamis (pbaris)
- */
 @Slf4j
 @RequiredArgsConstructor
 public class XMLToObjectTransformer extends AbstractPayloadTransformer<String, Object> {
