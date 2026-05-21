@@ -20,6 +20,7 @@ import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewResponse
 import gr.netmechanics.epp.client.impl.commands.transfer.domain.DomainTransferRequest;
 import gr.netmechanics.epp.client.impl.commands.update.domain.DomainUpdateRequest;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
+import gr.netmechanics.epp.client.impl.elements.ext.SecDnsExtension;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -318,5 +319,34 @@ class DomainTests extends EppClientTestBase {
             .build();
 
         assertCommandSuccess(eppClient.updateDomain(updateRequest));
+    }
+
+    @Test
+    @Order(18)
+    void test_domain_update_ds_marshalling() throws Exception {
+        var updateRequest = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .dsToAdd(List.of(new SecDnsExtension.DsData(12345, 3, 1, "ABCDEF1234567890")))
+            .dsToRemove(List.of(new SecDnsExtension.DsData(54321, 3, 1, "0987654321FEDCBA")))
+            .build();
+
+        String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
+        assertThat(xml).contains("<secDNS:add>");
+        assertThat(xml).contains("<secDNS:rem>");
+        assertThat(xml).contains("<secDNS:keyTag>12345</secDNS:keyTag>");
+        assertThat(xml).contains("<secDNS:keyTag>54321</secDNS:keyTag>");
+    }
+
+    @Test
+    @Order(19)
+    void test_domain_change_registration_type_marshalling() throws Exception {
+        var updateRequest = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .changeOwner("714_epp-client-r")
+            .changeRegistrationType()
+            .build();
+
+        String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
+        assertThat(xml).contains("<extdomain:op>registrationTypeChange</extdomain:op>");
     }
 }

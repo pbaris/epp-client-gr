@@ -4,6 +4,7 @@ import gr.netmechanics.epp.client.impl.commands.info.InfoResponse;
 import gr.netmechanics.epp.client.impl.commands.info.contact.ContactInfoResponse;
 import gr.netmechanics.epp.client.impl.commands.info.domain.DomainInfoResponse;
 import gr.netmechanics.epp.client.impl.commands.info.host.HostInfoResponse;
+import gr.netmechanics.epp.client.impl.commands.info.registrar.RegistrarInfoResponse;
 
 public class InfoResponseDeserializer extends AbstractResponseDeserializer<InfoResponse> {
 
@@ -20,5 +21,10 @@ public class InfoResponseDeserializer extends AbstractResponseDeserializer<InfoR
     @Override
     protected Class<HostInfoResponse> getHostResponseClass() {
         return HostInfoResponse.class;
+    }
+
+    @Override
+    protected Class<RegistrarInfoResponse> getRegistrarResponseClass() {
+        return RegistrarInfoResponse.class;
     }
 }

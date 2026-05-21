@@ -1,5 +1,6 @@
 package gr.netmechanics.epp.client.xml;
 
+import static gr.netmechanics.epp.client.xml.NamespaceXmlFactory.NS_ACCOUNT_LOC;
 import static gr.netmechanics.epp.client.xml.NamespaceXmlFactory.NS_CONTACT_LOC;
 import static gr.netmechanics.epp.client.xml.NamespaceXmlFactory.NS_DOMAIN_LOC;
 import static gr.netmechanics.epp.client.xml.NamespaceXmlFactory.NS_HOST_LOC;
@@ -31,6 +32,9 @@ public abstract class AbstractResponseDeserializer<T extends EppResponse> extend
 
             } else if (schemaLocation.equalsIgnoreCase(NS_HOST_LOC)) {
                 return (T) p.getCodec().treeToValue(node, getHostResponseClass());
+
+            } else if (schemaLocation.equalsIgnoreCase(NS_ACCOUNT_LOC)) {
+                return (T) p.getCodec().treeToValue(node, getRegistrarResponseClass());
             }
         }
 
@@ -42,4 +46,8 @@ public abstract class AbstractResponseDeserializer<T extends EppResponse> extend
     protected abstract Class<? extends EppResponse> getContactResponseClass();
 
     protected abstract Class<? extends EppResponse> getHostResponseClass();
+
+    protected Class<? extends EppResponse> getRegistrarResponseClass() {
+        return null;
+    }
 }

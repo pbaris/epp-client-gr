@@ -11,7 +11,8 @@ import gr.netmechanics.epp.client.impl.commands.info.host.HostInfoRequest;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DomainInfoRequest.class, name = "domain:info"),
     @JsonSubTypes.Type(value = ContactInfoRequest.class, name = "contact:info"),
-    @JsonSubTypes.Type(value = HostInfoRequest.class, name = "host:info")
+    @JsonSubTypes.Type(value = HostInfoRequest.class, name = "host:info"),
+    @JsonSubTypes.Type(value = gr.netmechanics.epp.client.impl.commands.info.registrar.RegistrarInfoRequest.class, name = "account:info")
 })
 public interface InfoRequest extends EppRequest {
 }

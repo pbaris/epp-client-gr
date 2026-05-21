@@ -24,6 +24,7 @@ import gr.netmechanics.epp.client.impl.commands.delete.host.HostDeleteRequest;
 import gr.netmechanics.epp.client.impl.commands.info.contact.ContactInfoRequest;
 import gr.netmechanics.epp.client.impl.commands.info.domain.DomainInfoRequest;
 import gr.netmechanics.epp.client.impl.commands.info.host.HostInfoRequest;
+import gr.netmechanics.epp.client.impl.commands.info.registrar.RegistrarInfoRequest;
 import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewRequest;
 import gr.netmechanics.epp.client.impl.commands.transfer.domain.DomainTransferRequest;
 import gr.netmechanics.epp.client.impl.commands.update.contact.ContactUpdateRequest;
@@ -231,6 +232,16 @@ public class EppClient {
      * @return the response from the EPP server containing the contact information
      */
     public EppCommandResponse getContactInfo(@NonNull final ContactInfoRequest infoRequest) {
+        return sendCommandRequest(request(infoRequest, eppProps.getClTrId()));
+    }
+
+    /**
+     * Retrieves detailed information about a registrar account by sending an Info request to the EPP server.
+     *
+     * @param infoRequest the request for which registrar information is being queried
+     * @return the response from the EPP server containing the registrar information
+     */
+    public EppCommandResponse getRegistrarInfo(@NonNull final RegistrarInfoRequest infoRequest) {
         return sendCommandRequest(request(infoRequest, eppProps.getClTrId()));
     }
 

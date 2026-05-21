@@ -11,6 +11,7 @@ import org.junit.platform.suite.api.SuiteDisplayName;
     ContactTests.class,
     HostTests.class,
     DomainTests.class,
+    RegistrarTests.class,
     RefreshEppTest.class
 })
 //@IncludeTags("run-this")
