@@ -98,8 +98,10 @@ public class LoginRequest implements EppRequest {
         public LoginRequest build() {
             var req = new LoginRequest();
             req.clientId = requireNonEmpty(clientId, "Client ID must be specified");
-            req.password = requireNonEmpty(password, "Password must be specified");
-            req.newPassword = newPassword;
+            req.password = validatePassword(requireNonEmpty(password, "Password must be specified"));
+            if (newPassword != null) {
+                req.newPassword = validatePassword(newPassword);
+            }
 
             String ver = requireNonEmpty(version, "EPP version must be specified");
             String lang = requireNonEmpty(language, "EPP language must be specified");
@@ -107,6 +109,37 @@ public class LoginRequest implements EppRequest {
             req.options = new LoginOptions(ver, lang);
             req.services = new Services(requireNonEmpty(objectUris, "Object URIs must be specified"));
             return req;
+        }
+
+        private static final String SPECIAL_CHARS = "~!@#$%^&*(){}:;-_+=\\/?[]";
+
+        private String validatePassword(final String password) {
+            if (password.length() < 8 || password.length() > 16) {
+                throw new IllegalArgumentException("Password length must be between 8 and 16");
+            }
+
+            boolean hasLower = false;
+            boolean hasUpper = false;
+            boolean hasDigit = false;
+            boolean hasSpecial = false;
+
+            for (char c : password.toCharArray()) {
+                if (Character.isLowerCase(c)) {
+                    hasLower = true;
+                } else if (Character.isUpperCase(c)) {
+                    hasUpper = true;
+                } else if (Character.isDigit(c)) {
+                    hasDigit = true;
+                } else if (SPECIAL_CHARS.indexOf(c) != -1) {
+                    hasSpecial = true;
+                }
+            }
+
+            if (!(hasLower && hasUpper && hasDigit && hasSpecial)) {
+                throw new IllegalArgumentException("Password must contain at least one character from each group: a-z, A-Z, 0-9, and special characters");
+            }
+
+            return password;
         }
     }
 }

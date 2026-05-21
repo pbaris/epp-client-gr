@@ -17,6 +17,7 @@ import gr.netmechanics.epp.client.impl.elements.Contact;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainIssueTokenExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.HasExtension;
+import gr.netmechanics.epp.client.impl.elements.ext.SecDnsExtension;
 import gr.netmechanics.epp.client.impl.schema.DomainSchema;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,7 +44,19 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
     private ChangesNode changes;
 
     @JsonIgnore
-    private EppExtension extension;
+    private java.util.List<EppExtension> extensions = new java.util.ArrayList<>();
+
+    @Override
+    @JsonIgnore
+    public EppExtension getExtension() {
+        return extensions.isEmpty() ? null : extensions.getFirst();
+    }
+
+    @Override
+    @JsonIgnore
+    public java.util.List<EppExtension> getExtensions() {
+        return extensions;
+    }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private record ChangesNode(
@@ -77,6 +90,9 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
         private List<String> techContactsRemove;
         private List<String> billingContactsAdd;
         private List<String> billingContactsRemove;
+
+        private List<SecDnsExtension.DsData> dsToAdd;
+        private List<SecDnsExtension.DsData> dsToRemove;
 
         private EppExtension extension;
 
@@ -142,6 +158,21 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
             return this;
         }
 
+        public DomainUpdateRequestBuilder changeRegistrationType() {
+            this.extension = new DomainExtension(UpdateOperation.CHANGE_REGISTRATION_TYPE);
+            return this;
+        }
+
+        public DomainUpdateRequestBuilder dsToAdd(final List<SecDnsExtension.DsData> dsToAdd) {
+            this.dsToAdd = dsToAdd;
+            return this;
+        }
+
+        public DomainUpdateRequestBuilder dsToRemove(final List<SecDnsExtension.DsData> dsToRemove) {
+            this.dsToRemove = dsToRemove;
+            return this;
+        }
+
         @Override
         @SuppressWarnings("unchecked")
         public DomainUpdateRequest build() {
@@ -149,14 +180,23 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
             req.name = requireNonEmpty(name, "Domain name must be specified");
 
             if (extension instanceof DomainIssueTokenExtension) {
-                req.extension = extension;
+                req.extensions.add(extension);
 
             } else if (extension instanceof DomainExtension) {
-                req.extension = extension;
+                req.extensions.add(extension);
                 req.changes = new ChangesNode(null, null, requireNonEmpty(registrant, "Registrant ID must be specified"));
 
             } else {
                 buildPlainUpdate(req);
+            }
+
+            if (CollectionUtils.isNotEmpty(dsToAdd) || CollectionUtils.isNotEmpty(dsToRemove)) {
+                SecDnsExtension secDns = new SecDnsExtension(
+                    CollectionUtils.isNotEmpty(dsToAdd) ? new SecDnsExtension.DsNode(dsToAdd) : null,
+                    CollectionUtils.isNotEmpty(dsToRemove) ? new SecDnsExtension.DsNode(dsToRemove) : null,
+                    null
+                );
+                req.extensions.add(secDns);
             }
 
             return req;

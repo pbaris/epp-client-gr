@@ -53,7 +53,8 @@ public class EppCommand {
     private LogoutRequest logoutRequest;
 
     @JacksonXmlProperty(localName = "extension")
-    private ExtensionNode extension;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private java.util.List<ExtensionNode> extensions;
 
     @JacksonXmlProperty(localName = "clTRID")
     private String clientTransactionId;
@@ -87,8 +88,14 @@ public class EppCommand {
             this.logoutRequest = r;
         }
 
-        if (request instanceof HasExtension r && r.getExtension() != null) {
-            extension = new ExtensionNode(r.getExtension());
+        if (request instanceof HasExtension r) {
+            java.util.List<EppExtension> exts = r.getExtensions();
+            if (!exts.isEmpty()) {
+                this.extensions = new java.util.ArrayList<>();
+                for (EppExtension e : exts) {
+                    this.extensions.add(new ExtensionNode(e));
+                }
+            }
         }
 
         Optional.ofNullable(EppRequestType.fromInstance(request))
