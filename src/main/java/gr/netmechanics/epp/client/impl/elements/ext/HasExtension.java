@@ -1,9 +1,9 @@
 package gr.netmechanics.epp.client.impl.elements.ext;
 
-import gr.netmechanics.epp.client.impl.EppExtension;
-
 import java.util.Collections;
 import java.util.List;
+
+import gr.netmechanics.epp.client.impl.EppExtension;
 
 public interface HasExtension {
 

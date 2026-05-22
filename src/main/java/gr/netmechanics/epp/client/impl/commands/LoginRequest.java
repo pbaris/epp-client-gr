@@ -136,7 +136,8 @@ public class LoginRequest implements EppRequest {
             }
 
             if (!(hasLower && hasUpper && hasDigit && hasSpecial)) {
-                throw new IllegalArgumentException("Password must contain at least one character from each group: a-z, A-Z, 0-9, and special characters");
+                throw new IllegalArgumentException(
+                    "Password must contain at least one character from each group: a-z, A-Z, 0-9, and special characters");
             }
 
             return password;
