@@ -1,5 +1,7 @@
 package gr.netmechanics.epp.client.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -54,7 +56,7 @@ public class EppCommand {
 
     @JacksonXmlProperty(localName = "extension")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private java.util.List<ExtensionNode> extensions;
+    private List<ExtensionNode> extensions;
 
     @JacksonXmlProperty(localName = "clTRID")
     private String clientTransactionId;
@@ -89,9 +91,9 @@ public class EppCommand {
         }
 
         if (request instanceof HasExtension r) {
-            java.util.List<EppExtension> exts = r.getExtensions();
+            List<EppExtension> exts = r.getExtensions();
             if (!exts.isEmpty()) {
-                this.extensions = new java.util.ArrayList<>();
+                this.extensions = new ArrayList<>();
                 for (EppExtension e : exts) {
                     this.extensions.add(new ExtensionNode(e));
                 }

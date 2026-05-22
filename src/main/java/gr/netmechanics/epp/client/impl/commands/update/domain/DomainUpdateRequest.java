@@ -3,6 +3,7 @@ package gr.netmechanics.epp.client.impl.commands.update.domain;
 import static gr.netmechanics.epp.client.impl.EppBuilder.mergeContacts;
 import static gr.netmechanics.epp.client.impl.EppBuilder.requireNonEmpty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,7 +45,7 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
     private ChangesNode changes;
 
     @JsonIgnore
-    private java.util.List<EppExtension> extensions = new java.util.ArrayList<>();
+    private final List<EppExtension> extensions = new ArrayList<>();
 
     @Override
     @JsonIgnore
@@ -54,7 +55,7 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
 
     @Override
     @JsonIgnore
-    public java.util.List<EppExtension> getExtensions() {
+    public List<EppExtension> getExtensions() {
         return extensions;
     }
 
