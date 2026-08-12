@@ -43,11 +43,10 @@ public class EppXmlCodec {
     }
 
     public <T> T unmarshal(final String payload, final Class<T> type) {
-        if (log.isDebugEnabled()) {
-            log.debug("Received message:\n{}\n", minifyXml(payload));
-        }
-
         try {
+            if (log.isDebugEnabled()) {
+                log.debug("Received message:\n{}\n", minifyXml(payload));
+            }
             return xmlMapper.readValue(payload, type);
 
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package gr.netmechanics.epp.client;
 
+import gr.netmechanics.epp.client.xml.EppXmlCodecTest;
 import org.junit.platform.suite.api.SelectClasses;
+import gr.netmechanics.epp.client.EppCookieInterceptorTest;
 import org.junit.platform.suite.api.Suite;
 import org.junit.platform.suite.api.SuiteDisplayName;
 
@@ -12,7 +14,9 @@ import org.junit.platform.suite.api.SuiteDisplayName;
     HostTests.class,
     DomainTests.class,
     RegistrarTests.class,
-    RefreshEppTest.class
+    RefreshEppTest.class,
+    EppCookieInterceptorTest.class,
+    EppXmlCodecTest.class
 })
 //@IncludeTags("run-this")
 public class EppClientTestSuite {

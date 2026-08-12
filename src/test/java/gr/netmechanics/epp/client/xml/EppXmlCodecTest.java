@@ -6,9 +6,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import gr.netmechanics.epp.client.error.EppGatewayException;
 import gr.netmechanics.epp.client.impl.EppCommandResponse;
+import gr.netmechanics.epp.client.impl.commands.Hello;
 import org.junit.jupiter.api.Test;
 
-class EppXmlCodecTest {
+public class EppXmlCodecTest {
 
     @Test
     void unmarshal_wraps_parse_failures_in_epp_gateway_exception() {
@@ -46,5 +47,31 @@ class EppXmlCodecTest {
         String xml = "<hello/>";
 
         assertThat(EppXmlCodec.redact(xml)).isEqualTo("<hello/>");
+    }
+
+    @Test
+    void marshal_serializes_object_to_xml_string() {
+        EppXmlCodec codec = new EppXmlCodec(new XmlMapper());
+
+        String xml = codec.marshal(new Hello());
+
+        assertThat(xml)
+            .isNotNull()
+            .isNotEmpty()
+            .contains("<hello");
+    }
+
+    @Test
+    void marshal_wraps_serialization_failures_in_epp_gateway_exception() {
+        EppXmlCodec codec = new EppXmlCodec(new XmlMapper());
+
+        class Unserializable {
+            public String getValue() {
+                throw new RuntimeException("boom");
+            }
+        }
+
+        assertThatThrownBy(() -> codec.marshal(new Unserializable()))
+            .isInstanceOf(EppGatewayException.class);
     }
 }
