@@ -18,7 +18,7 @@ public class EppCookieInterceptorTest {
     @Test
     void strips_set_cookie_attributes_and_stores_only_name_value_pair() throws Exception {
         EppSessionCookieStore cookieStore = new EppSessionCookieStore();
-        EppCookieInterceptor interceptor = new EppCookieInterceptor(cookieStore);
+        final EppCookieInterceptor interceptor = new EppCookieInterceptor(cookieStore);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.put(HttpHeaders.SET_COOKIE, List.of("JSESSIONID=abc123; Path=/; HttpOnly; SameSite=Lax"));
@@ -41,7 +41,7 @@ public class EppCookieInterceptorTest {
     void sends_stored_cookie_as_cookie_header_on_next_request() throws Exception {
         EppSessionCookieStore cookieStore = new EppSessionCookieStore();
         cookieStore.set("JSESSIONID=abc123");
-        EppCookieInterceptor interceptor = new EppCookieInterceptor(cookieStore);
+        final EppCookieInterceptor interceptor = new EppCookieInterceptor(cookieStore);
 
         ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getHeaders()).thenReturn(new HttpHeaders());
@@ -61,7 +61,7 @@ public class EppCookieInterceptorTest {
     @Test
     void does_not_add_cookie_header_when_store_is_empty() throws Exception {
         EppSessionCookieStore cookieStore = new EppSessionCookieStore();
-        EppCookieInterceptor interceptor = new EppCookieInterceptor(cookieStore);
+        final EppCookieInterceptor interceptor = new EppCookieInterceptor(cookieStore);
 
         ClientHttpResponse response = mock(ClientHttpResponse.class);
         when(response.getHeaders()).thenReturn(new HttpHeaders());
