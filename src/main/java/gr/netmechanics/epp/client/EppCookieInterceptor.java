@@ -39,7 +39,7 @@ public class EppCookieInterceptor implements ClientHttpRequestInterceptor {
         return response;
     }
 
-    private String toCookieHeader(final List<String> setCookieHeaders) {
+    private static String toCookieHeader(final List<String> setCookieHeaders) {
         return setCookieHeaders.stream()
             .map(header -> header.split(";", 2)[0].trim())
             .collect(Collectors.joining("; "));

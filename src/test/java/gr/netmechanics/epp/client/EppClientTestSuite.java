@@ -16,7 +16,8 @@ import org.junit.platform.suite.api.SuiteDisplayName;
     RegistrarTests.class,
     RefreshEppTest.class,
     EppCookieInterceptorTest.class,
-    EppXmlCodecTest.class
+    EppXmlCodecTest.class,
+    RestEppGatewayTest.class
 })
 //@IncludeTags("run-this")
 public class EppClientTestSuite {

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EppXmlCodec {
 
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("(?s)(<(?:pw|newPW)>).*?(</(?:pw|newPW)>)");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("(?s)(<((?:\\w+:)?(?:pw|newPW))>).*?(</\\2>)");
 
     private final XmlMapper xmlMapper;
 
@@ -45,7 +45,7 @@ public class EppXmlCodec {
     public <T> T unmarshal(final String payload, final Class<T> type) {
         try {
             if (log.isDebugEnabled()) {
-                log.debug("Received message:\n{}\n", minifyXml(payload));
+                log.debug("Received message:\n{}\n", redact(minifyXml(payload)));
             }
             return xmlMapper.readValue(payload, type);
 
@@ -55,7 +55,7 @@ public class EppXmlCodec {
     }
 
     static String redact(final String xml) {
-        return PASSWORD_PATTERN.matcher(xml).replaceAll("$1***REDACTED***$2");
+        return PASSWORD_PATTERN.matcher(xml).replaceAll("$1***REDACTED***$3");
     }
 
     @SneakyThrows

@@ -79,7 +79,16 @@ epp.cl-tr-id=211119810900
 epp.use-sandbox=false
 epp.client-id=<your-client-id>
 epp.password=<your-password>
+epp.connect-timeout-millis=10000
+epp.read-timeout-millis=30000
 ----
+
+`epp.connect-timeout-millis` (default `10000`) and `epp.read-timeout-millis` (default `30000`) configure the
+connect/read timeouts of the `RestClient` used to talk to the EPP server; both are optional.
+
+NOTE: If a host application overrides the `eppRestClient` bean with its own `RestClient`, it must also register
+the library's `EppCookieInterceptor` (or equivalent cookie-propagation logic) itself, or the EPP session cookie
+won't survive across requests and every command will silently fail to stay authenticated.
 
 === EppClient
 

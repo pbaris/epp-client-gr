@@ -22,7 +22,7 @@ public class RestEppGateway implements EppGateway {
 
     private static final MediaType EPP_XML = new MediaType("application", "epp+xml", StandardCharsets.UTF_8);
 
-    @Qualifier("eppRestClient")
+    @Qualifier(EppConstants.BEAN_REST_CLIENT)
     private final RestClient restClient;
     private final EppXmlCodec codec;
     private final ApplicationContext context;

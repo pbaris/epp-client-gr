@@ -3,11 +3,18 @@ package gr.netmechanics.epp.client.xml;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.stream.Collectors;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import gr.netmechanics.epp.client.error.EppGatewayException;
 import gr.netmechanics.epp.client.impl.EppCommandResponse;
 import gr.netmechanics.epp.client.impl.commands.Hello;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 
 public class EppXmlCodecTest {
 
@@ -17,6 +24,37 @@ public class EppXmlCodecTest {
 
         assertThatThrownBy(() -> codec.unmarshal("not xml at all", EppCommandResponse.class))
             .isInstanceOf(EppGatewayException.class);
+    }
+
+    @Test
+    void unmarshal_redacts_password_in_response_log() {
+        Logger logger = (Logger) LoggerFactory.getLogger(EppXmlCodec.class);
+        logger.setLevel(Level.DEBUG);
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        logger.addAppender(appender);
+
+        EppXmlCodec codec = new EppXmlCodec(new XmlMapper());
+        String xml = "<epp><response><resData><domain:infData xmlns:domain=\"urn:ietf:params:xml:ns:domain-1.0\">"
+            + "<domain:authInfo><domain:pw>topsecret</domain:pw></domain:authInfo>"
+            + "</domain:infData></resData></response></epp>";
+
+        try {
+            codec.unmarshal(xml, EppCommandResponse.class);
+        } catch (EppGatewayException ignored) {
+            // this minimal fixture may not fully match EppCommandResponse's shape;
+            // we only care that the received-message log line was already redacted.
+        } finally {
+            logger.detachAppender(appender);
+        }
+
+        String logged = appender.list.stream()
+            .map(ILoggingEvent::getFormattedMessage)
+            .collect(Collectors.joining("\n"));
+
+        assertThat(logged)
+            .contains("***REDACTED***")
+            .doesNotContain("topsecret");
     }
 
     @Test
@@ -40,6 +78,40 @@ public class EppXmlCodecTest {
         assertThat(redacted)
             .contains("<newPW>***REDACTED***</newPW>")
             .doesNotContain("brandNewSecret");
+    }
+
+    @Test
+    void redact_masks_namespace_prefixed_password_field() {
+        String xml = "<domain:transfer><domain:authInfo><domain:pw>password</domain:pw>"
+            + "</domain:authInfo></domain:transfer>";
+
+        String redacted = EppXmlCodec.redact(xml);
+
+        assertThat(redacted)
+            .contains("<domain:pw>***REDACTED***</domain:pw>")
+            .doesNotContain("password");
+    }
+
+    @Test
+    void redact_masks_namespace_prefixed_new_password_field() {
+        String xml = "<contact:update><contact:authInfo><contact:newPW>brandNewSecret</contact:newPW>"
+            + "</contact:authInfo></contact:update>";
+
+        String redacted = EppXmlCodec.redact(xml);
+
+        assertThat(redacted)
+            .contains("<contact:newPW>***REDACTED***</contact:newPW>")
+            .doesNotContain("brandNewSecret");
+    }
+
+    @Test
+    void redact_does_not_collapse_mismatched_open_and_close_tag_names() {
+        String xml = "<foo><pw>x</newPW></foo>";
+
+        String redacted = EppXmlCodec.redact(xml);
+
+        // "<pw>x</newPW>" has a mismatched close tag name and must not be treated as a valid pw block.
+        assertThat(redacted).isEqualTo(xml);
     }
 
     @Test
