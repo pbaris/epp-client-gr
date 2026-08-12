@@ -31,7 +31,7 @@ public class EppHttpClientConfiguration {
             .requestFactory(requestFactory)
             .requestInterceptor(new EppCookieInterceptor(cookieStore))
             .messageConverters(converters ->
-                converters.add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)))
+                converters.addFirst(new StringHttpMessageConverter(StandardCharsets.UTF_8)))
             .build();
     }
 }
