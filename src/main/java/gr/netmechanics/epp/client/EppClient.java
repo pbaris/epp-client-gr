@@ -1,11 +1,9 @@
 package gr.netmechanics.epp.client;
 
 import static gr.netmechanics.epp.client.EppConstants.BEAN_EPP_CLIENT;
-import static gr.netmechanics.epp.client.EppConstants.BEAN_SHARED_HEADERS;
 import static gr.netmechanics.epp.client.impl.EppCommandRequest.request;
 
 import java.time.Instant;
-import java.util.Map;
 
 import gr.netmechanics.epp.client.error.EppGatewayException;
 import gr.netmechanics.epp.client.impl.EppCommandRequest;
@@ -34,7 +32,6 @@ import gr.netmechanics.epp.client.impl.elements.Greeting;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -44,9 +41,7 @@ import org.springframework.stereotype.Component;
 public class EppClient {
 
     private final EppGateway eppGateway;
-
-    @Qualifier(BEAN_SHARED_HEADERS)
-    private final Map<String, Object> sharedHeaders;
+    private final EppSessionCookieStore cookieStore;
 
     private EppPropertiesProvider eppProps;
     private Instant sessionExpiresAt;
@@ -339,7 +334,7 @@ public class EppClient {
     private void clear() {
         sessionExpiresAt = null;
         greeting = null;
-        sharedHeaders.clear();
+        cookieStore.clear();
     }
 
     @Autowired

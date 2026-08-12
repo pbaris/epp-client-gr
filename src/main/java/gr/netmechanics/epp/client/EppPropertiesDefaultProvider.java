@@ -36,4 +36,14 @@ public class EppPropertiesDefaultProvider implements EppPropertiesProvider {
     public String getUrl() {
         return properties.getUrl();
     }
+
+    @Override
+    public long getConnectTimeoutMillis() {
+        return properties.getConnectTimeoutMillis();
+    }
+
+    @Override
+    public long getReadTimeoutMillis() {
+        return properties.getReadTimeoutMillis();
+    }
 }

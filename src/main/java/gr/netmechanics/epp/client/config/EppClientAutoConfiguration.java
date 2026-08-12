@@ -10,12 +10,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.integration.annotation.IntegrationComponentScan;
 
 @AutoConfiguration
 @ComponentScan(BASE_PACKAGE)
 @ConfigurationPropertiesScan(BASE_PACKAGE)
-@IntegrationComponentScan(BASE_PACKAGE)
 public class EppClientAutoConfiguration {
 
     @Bean

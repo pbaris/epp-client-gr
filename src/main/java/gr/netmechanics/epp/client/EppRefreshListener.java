@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 public class EppRefreshListener {
 
     @Lazy
-    private final EppRequestFlowManager requestFlowManager;
-
-    @Lazy
     private final EppClient eppClient;
 
     @Lazy
@@ -21,8 +18,6 @@ public class EppRefreshListener {
 
     @EventListener
     public void onRefresh(final EppRefreshEvent event) {
-        EppPropertiesProvider eppProps = context.getBean(EppPropertiesProvider.class);
-        eppClient.setEppProps(eppProps);
-        requestFlowManager.restartFlow(eppProps);
+        eppClient.setEppProps(context.getBean(EppPropertiesProvider.class));
     }
 }

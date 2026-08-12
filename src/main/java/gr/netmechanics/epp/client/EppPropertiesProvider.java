@@ -12,4 +12,12 @@ public interface EppPropertiesProvider {
     Long getClTrId();
 
     String getUrl();
+
+    default long getConnectTimeoutMillis() {
+        return 10_000;
+    }
+
+    default long getReadTimeoutMillis() {
+        return 30_000;
+    }
 }
