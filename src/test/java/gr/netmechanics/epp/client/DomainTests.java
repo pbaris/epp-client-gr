@@ -366,4 +366,16 @@ class DomainTests extends EppClientTestBase {
             .isInstanceOf(IllegalStateException.class)
             .hasMessageContaining("Only one of issueToken/changeOwner/changeOwnerName");
     }
+
+    @Test
+    @Order(21)
+    void test_domain_delete_recall_marshalling() throws Exception {
+        var deleteRequest = DomainDeleteRequest.builder()
+            .domainName("epp-client-test1.gr")
+            .deleteOperation(DeleteOperation.RECALL, "33223")
+            .build();
+
+        assertThat(xmlUtil.toXml(request(deleteRequest, eppProps.getClTrId())))
+            .isEqualTo(xmlUtil.xmlFromFile("domain_delete_recall_request.xml"));
+    }
 }
