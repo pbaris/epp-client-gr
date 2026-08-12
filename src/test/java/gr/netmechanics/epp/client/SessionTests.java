@@ -77,45 +77,62 @@ class SessionTests extends EppClientTestBase {
 
     @Test
     @Order(6)
-    void test_password_validation() {
+    void test_new_password_validation() {
         LoginRequestBuilder builder = loginRequestBuilder()
             .clientId("clientId")
             .version("1.0")
             .language("el")
             .objectUris(List.of("uri"));
 
-        // Valid password
-        builder.password("Valid123!@").build();
+        // Valid new password
+        builder.newPassword("Valid123!@").build();
 
         // Too short
-        assertThatThrownBy(() -> builder.password("Val1!").build())
+        assertThatThrownBy(() -> builder.newPassword("Val1!").build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("length");
 
         // Too long
-        assertThatThrownBy(() -> builder.password("Valid1234567890!@#").build())
+        assertThatThrownBy(() -> builder.newPassword("Valid1234567890!@#").build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("length");
 
         // Missing lower
-        assertThatThrownBy(() -> builder.password("VALID123!@").build())
+        assertThatThrownBy(() -> builder.newPassword("VALID123!@").build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("character from each group");
 
         // Missing upper
-        assertThatThrownBy(() -> builder.password("valid123!@").build())
+        assertThatThrownBy(() -> builder.newPassword("valid123!@").build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("character from each group");
 
         // Missing digit
-        assertThatThrownBy(() -> builder.password("Valid!!!@").build())
+        assertThatThrownBy(() -> builder.newPassword("Valid!!!@").build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("character from each group");
 
         // Missing special
-        assertThatThrownBy(() -> builder.password("Valid1234").build())
+        assertThatThrownBy(() -> builder.newPassword("Valid1234").build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("character from each group");
+    }
+
+    @Test
+    @Order(7)
+    void test_existing_password_not_format_validated() {
+        // The existing (authenticating) password isn't subject to the composition policy —
+        // only a newPassword being set has to conform to it. A legacy password that predates
+        // this policy must still be usable to log in.
+        LoginRequest loginRequest = loginRequestBuilder()
+            .clientId("clientId")
+            .password("legacy")
+            .version("1.0")
+            .language("el")
+            .objectUris(List.of("uri"))
+            .build();
+
+        assertThat(loginRequest.getPassword()).isEqualTo("legacy");
     }
 
     private LoginRequestBuilder loginRequestBuilder() {

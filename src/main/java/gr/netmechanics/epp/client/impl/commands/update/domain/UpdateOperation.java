@@ -5,8 +5,7 @@ import lombok.Getter;
 @Getter
 public enum UpdateOperation {
     CHANGE_OWNER("ownerChange"),
-    CHANGE_OWNER_NAME("ownerNameChange"),
-    CHANGE_REGISTRATION_TYPE("registrationTypeChange");
+    CHANGE_OWNER_NAME("ownerNameChange");
 
     private final String xmlName;
 

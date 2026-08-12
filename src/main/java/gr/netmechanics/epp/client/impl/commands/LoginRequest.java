@@ -98,7 +98,7 @@ public class LoginRequest implements EppRequest {
         public LoginRequest build() {
             var req = new LoginRequest();
             req.clientId = requireNonEmpty(clientId, "Client ID must be specified");
-            req.password = validatePassword(requireNonEmpty(password, "Password must be specified"));
+            req.password = requireNonEmpty(password, "Password must be specified");
             if (newPassword != null) {
                 req.newPassword = validatePassword(newPassword);
             }

@@ -1,6 +1,5 @@
 package gr.netmechanics.epp.client.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,9 +53,10 @@ public class EppCommand {
     @JacksonXmlProperty(localName = "logout")
     private LogoutRequest logoutRequest;
 
+    @JacksonXmlElementWrapper(localName = "extension")
     @JacksonXmlProperty(localName = "extension")
-    @JacksonXmlElementWrapper(useWrapping = false)
-    private List<ExtensionNode> extensions;
+    @JsonSerialize(contentUsing = ExtensionSerializer.class)
+    private List<EppExtension> extensions;
 
     @JacksonXmlProperty(localName = "clTRID")
     private String clientTransactionId;
@@ -93,19 +93,11 @@ public class EppCommand {
         if (request instanceof HasExtension r) {
             List<EppExtension> exts = r.getExtensions();
             if (!exts.isEmpty()) {
-                this.extensions = new ArrayList<>();
-                for (EppExtension e : exts) {
-                    this.extensions.add(new ExtensionNode(e));
-                }
+                this.extensions = exts;
             }
         }
 
         Optional.ofNullable(EppRequestType.fromInstance(request))
             .ifPresent(type -> this.clientTransactionId = type.name() + '-' + cti);
-    }
-
-    private record ExtensionNode(
-        @JsonSerialize(using = ExtensionSerializer.class)
-        EppExtension cmdExtension) {
     }
 }

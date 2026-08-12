@@ -143,25 +143,28 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
         }
 
         public DomainUpdateRequestBuilder issueToken() {
-            this.extension = new DomainIssueTokenExtension();
+            setSingleExtension(new DomainIssueTokenExtension());
             return this;
         }
 
         public DomainUpdateRequestBuilder changeOwner(final String registrant) {
             this.registrant = registrant;
-            this.extension = new DomainExtension(UpdateOperation.CHANGE_OWNER);
+            setSingleExtension(new DomainExtension(UpdateOperation.CHANGE_OWNER));
             return this;
         }
 
         public DomainUpdateRequestBuilder changeOwnerName(final String registrant) {
             this.registrant = registrant;
-            this.extension = new DomainExtension(UpdateOperation.CHANGE_OWNER_NAME);
+            setSingleExtension(new DomainExtension(UpdateOperation.CHANGE_OWNER_NAME));
             return this;
         }
 
-        public DomainUpdateRequestBuilder changeRegistrationType() {
-            this.extension = new DomainExtension(UpdateOperation.CHANGE_REGISTRATION_TYPE);
-            return this;
+        private void setSingleExtension(final EppExtension newExtension) {
+            if (this.extension != null) {
+                throw new IllegalStateException(
+                    "Only one of issueToken/changeOwner/changeOwnerName can be requested per domain update");
+            }
+            this.extension = newExtension;
         }
 
         public DomainUpdateRequestBuilder dsToAdd(final List<SecDnsExtension.DsData> dsToAdd) {

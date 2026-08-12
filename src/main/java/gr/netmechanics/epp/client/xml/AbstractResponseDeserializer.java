@@ -48,6 +48,6 @@ public abstract class AbstractResponseDeserializer<T extends EppResponse> extend
     protected abstract Class<? extends EppResponse> getHostResponseClass();
 
     protected Class<? extends EppResponse> getRegistrarResponseClass() {
-        return null;
+        throw new UnsupportedOperationException("Registrar/account responses are not supported for this command type");
     }
 }

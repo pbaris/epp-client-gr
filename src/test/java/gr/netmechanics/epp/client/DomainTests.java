@@ -2,6 +2,7 @@ package gr.netmechanics.epp.client;
 
 import static gr.netmechanics.epp.client.impl.EppCommandRequest.request;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -339,14 +340,30 @@ class DomainTests extends EppClientTestBase {
 
     @Test
     @Order(19)
-    void test_domain_change_registration_type_marshalling() throws Exception {
+    void test_domain_update_combined_extensions_marshalling() throws Exception {
         var updateRequest = DomainUpdateRequest.builder()
             .domainName("epp-client.gr")
             .changeOwner("714_epp-client-r")
-            .changeRegistrationType()
+            .dsToAdd(List.of(new SecDnsExtension.DsData(12345, 3, 1, "ABCDEF1234567890")))
             .build();
 
         String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
-        assertThat(xml).contains("<extdomain:op>registrationTypeChange</extdomain:op>");
+
+        // Only one <extension> wrapper is allowed per EPP command; combined extensions must nest inside it.
+        assertThat(xml).containsOnlyOnce("<extension>").containsOnlyOnce("</extension>");
+        assertThat(xml).contains("<extdomain:op>ownerChange</extdomain:op>");
+        assertThat(xml).contains("<secDNS:add>");
+    }
+
+    @Test
+    @Order(20)
+    void test_domain_update_conflicting_operations_rejected() {
+        var builder = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .changeOwner("714_epp-client-r");
+
+        assertThatThrownBy(() -> builder.changeOwnerName("714_epp-client-o"))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessageContaining("Only one of issueToken/changeOwner/changeOwnerName");
     }
 }

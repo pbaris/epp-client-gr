@@ -1,13 +1,11 @@
 package gr.netmechanics.epp.client.impl.commands.info.registrar;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import gr.netmechanics.epp.client.impl.commands.info.InfoResponse;
-import gr.netmechanics.epp.client.impl.elements.ContactStatus;
-import gr.netmechanics.epp.client.impl.elements.PostalInfo;
 import gr.netmechanics.epp.client.impl.schema.RegistrarSchema;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,42 +19,34 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RegistrarInfoResponse implements RegistrarSchema, InfoResponse {
 
-    @JacksonXmlProperty(localName = "id")
-    private String id;
-
     @JacksonXmlProperty(localName = "roid")
     private String repositoryObjectId;
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "status")
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    private List<ContactStatus> statuses;
+    @JacksonXmlProperty(localName = "ddPaymentCode")
+    private String directDebitPaymentCode;
 
-    @JacksonXmlProperty(localName = "postalInfo")
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    private List<PostalInfo> postalInfos;
+    @JacksonXmlProperty(localName = "caAllowed")
+    private boolean chargeableActionsAllowed;
 
-    @JacksonXmlProperty(localName = "voice")
-    private String voice;
+    @JacksonXmlProperty(localName = "balance")
+    private Balance balance;
 
-    @JacksonXmlProperty(localName = "fax")
-    private String fax;
+    @JacksonXmlProperty(localName = "tbSuspendedOn")
+    private LocalDate toBeSuspendedOn;
 
-    @JacksonXmlProperty(localName = "email")
-    private String email;
+    @JacksonXmlProperty(localName = "suspendedOn")
+    private LocalDate suspendedOn;
 
-    @JacksonXmlProperty(localName = "clID")
-    private String clientId;
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    @ToString
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Balance {
 
-    @JacksonXmlProperty(localName = "crID")
-    private String creatorId;
+        @JacksonXmlProperty(isAttribute = true, localName = "currency")
+        private String currency;
 
-    @JacksonXmlProperty(localName = "crDate")
-    private String creationDate;
-
-    @JacksonXmlProperty(localName = "upID")
-    private String updatorId;
-
-    @JacksonXmlProperty(localName = "upDate")
-    private String updateDate;
+        @JacksonXmlText
+        private BigDecimal amount;
+    }
 }

@@ -18,9 +18,8 @@ class RegistrarTests extends EppClientTestBase {
     void test_registrar_info_marshalling() throws Exception {
         var infoRequest = new RegistrarInfoRequest();
 
-        String xml = xmlUtil.toXml(request(infoRequest, eppProps.getClTrId()));
-        assertThat(xml).contains("<account:info");
-        assertThat(xml).contains("xmlns:account=\"urn:ics-forth:params:xml:ns:account-1.1\"");
+        assertThat(xmlUtil.toXml(request(infoRequest, eppProps.getClTrId())))
+            .isEqualTo(xmlUtil.xmlFromFile("registrar_info_request.xml"));
     }
 
     @Test
@@ -32,7 +31,13 @@ class RegistrarTests extends EppClientTestBase {
 
         assertThat(cmd.<RegistrarInfoResponse>getInfoResponse()).satisfies(info -> {
             assertThat(info).isNotNull();
-            assertThat(info.getClientId()).isEqualTo(eppProps.getClientId());
+            assertThat(info.getRepositoryObjectId()).isNotBlank();
+            assertThat(info.getDirectDebitPaymentCode()).matches("RF\\d{23}");
+            assertThat(info.getBalance()).satisfies(balance -> {
+                assertThat(balance).isNotNull();
+                assertThat(balance.getCurrency()).isEqualTo("EUR");
+                assertThat(balance.getAmount()).isNotNull();
+            });
         });
     }
 }

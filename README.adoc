@@ -109,7 +109,7 @@ The Registry functions as defined by the EPP protocol standards (RFC3730, RFC373
 * ✅ `<check>` is used to check the existence (availability) of one or more domain names.
 * ✅ `<info>` is used to retrieve the full details of a domain name (under certain conditions).
 * ✅ `<create>` is used to create a domain name or activate a reserved domain name.
-* 🚧 `<update>` is used for changes the details of a domain name.
+* 🚧 `<update>` is used for changes the details of a domain name (including DNSSEC/`secDNS` DS record add and remove; changing a reserved-format domain's registration type is not yet implemented).
 * ✅ `<renew>` is used to renew the registration period of a domain name.
 * ✅ `<delete>` is used to delete a domain name, a reserved domain name, or to revoke the creation of a domain name.
 * ✅ `<transfer>` is used to change the registrar of a domain name.
@@ -137,7 +137,7 @@ The Registry functions as defined by the EPP protocol standards (RFC3730, RFC373
 === Registrar Account Management Commands
 
 * 🛑 `<check>` is not defined for registrar accounts.
-* ⬜ `<info>` is used to retrieve the data of a registrar account.
+* ✅ `<info>` is used to retrieve the data of a registrar account.
 * 🛑 `<create>` is not defined for registrar accounts.
 * 🛑 `<update>` is not defined for registrar accounts.
 * 🛑 `<renew>` is not defined for registrar accounts.

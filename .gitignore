@@ -36,5 +36,10 @@ out/
 ### VS Code ###
 .vscode/
 
+### OpenWolf ###
+.wolf/*
+!.wolf/cerebrum.md
+!.wolf/config.json
+
 ### Others ###
 /src/test/resources/application.properties
