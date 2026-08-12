@@ -9,6 +9,7 @@ import gr.netmechanics.epp.client.impl.commands.Hello;
 import gr.netmechanics.epp.client.impl.elements.Greeting;
 import gr.netmechanics.epp.client.xml.EppXmlCodec;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ public class RestEppGateway implements EppGateway {
 
     private static final MediaType EPP_XML = new MediaType("application", "epp+xml", StandardCharsets.UTF_8);
 
+    @Qualifier("eppRestClient")
     private final RestClient restClient;
     private final EppXmlCodec codec;
     private final ApplicationContext context;

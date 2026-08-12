@@ -15,7 +15,7 @@ import org.springframework.web.client.RestClient;
 public class EppHttpClientConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = "eppRestClient")
     public RestClient eppRestClient(final EppPropertiesProvider eppProps, final EppSessionCookieStore cookieStore) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(Duration.ofMillis(eppProps.getConnectTimeoutMillis()));
