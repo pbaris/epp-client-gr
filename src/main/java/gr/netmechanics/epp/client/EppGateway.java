@@ -6,7 +6,7 @@ import gr.netmechanics.epp.client.impl.EppCommandResponse;
 import gr.netmechanics.epp.client.impl.commands.Hello;
 import gr.netmechanics.epp.client.impl.elements.Greeting;
 
-public interface EppGateway {
+interface EppGateway {
 
     /**
      * Sends a Hello message to the EPP server and receives a server greeting.

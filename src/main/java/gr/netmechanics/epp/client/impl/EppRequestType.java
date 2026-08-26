@@ -10,7 +10,7 @@ import gr.netmechanics.epp.client.impl.commands.renew.RenewRequest;
 import gr.netmechanics.epp.client.impl.commands.transfer.TransferRequest;
 import gr.netmechanics.epp.client.impl.commands.update.UpdateRequest;
 
-public enum EppRequestType {
+enum EppRequestType {
     INFO,
     CHECK,
     CREATE,

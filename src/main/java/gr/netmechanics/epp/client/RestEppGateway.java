@@ -18,7 +18,7 @@ import org.springframework.web.client.RestClientException;
 
 @Component
 @RequiredArgsConstructor
-public class RestEppGateway implements EppGateway {
+class RestEppGateway implements EppGateway {
 
     private static final MediaType EPP_XML = new MediaType("application", "epp+xml", StandardCharsets.UTF_8);
 

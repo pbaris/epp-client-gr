@@ -15,7 +15,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-public class EppHttpClientConfiguration {
+class EppHttpClientConfiguration {
 
     // Connect/read timeouts are fixed at bean-creation time. This is unlike the target URL, which
     // RestEppGateway deliberately re-reads via ApplicationContext.getBean(...) on every call so that

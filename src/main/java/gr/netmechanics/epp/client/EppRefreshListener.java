@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EppRefreshListener {
+class EppRefreshListener {
 
     @Lazy
     private final EppClient eppClient;

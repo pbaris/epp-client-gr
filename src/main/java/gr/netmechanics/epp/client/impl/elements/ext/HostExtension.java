@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import gr.netmechanics.epp.client.impl.EppExtension;
 import gr.netmechanics.epp.client.impl.elements.Comment;
-import gr.netmechanics.epp.client.impl.schema.ContactExtSchema;
+import gr.netmechanics.epp.client.impl.schema.HostExtSchema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter(AccessLevel.PRIVATE)
 @ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HostExtension implements ContactExtSchema, EppExtension {
+public class HostExtension implements HostExtSchema, EppExtension {
 
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "comment")

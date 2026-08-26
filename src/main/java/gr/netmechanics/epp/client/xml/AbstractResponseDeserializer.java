@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import gr.netmechanics.epp.client.impl.EppResponse;
 
-public abstract class AbstractResponseDeserializer<T extends EppResponse> extends JsonDeserializer<T> {
+abstract class AbstractResponseDeserializer<T extends EppResponse> extends JsonDeserializer<T> {
 
     @Override
     @SuppressWarnings("unchecked")
