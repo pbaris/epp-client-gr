@@ -12,6 +12,7 @@ import org.springframework.lang.NonNull;
 
 /**
  * Domain commands (RFC3731), reached via {@link EppClient#domains()}.
+ * Every command returns {@code null} if no EPP session could be established with the server.
  */
 public class EppDomainCommands {
 

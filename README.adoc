@@ -98,7 +98,17 @@ Inject/Autowire the EppClient to your code. Commands are grouped by object type:
 ----
 eppClient.domains().check(DomainCheckRequest.builder().domainNames("example.gr").build());
 eppClient.hosts().info(HostInfoRequest.builder().hostName("ns1.example.gr").build());
-eppClient.contacts().create(ContactCreateRequest.builder()...build());
+eppClient.contacts().create(ContactCreateRequest.builder()
+        .contactId("gr12345")
+        .email("info@example.gr")
+        .localPostalInfo(PostalInfo.builder()
+                .name("John Doe")
+                .address(Address.builder()
+                        .city("Athens")
+                        .postalCode("12345")
+                        .stateOrProvince("Attica")
+                        .countryCode("GR")))
+        .build());
 eppClient.registrar().info(new RegistrarInfoRequest());
 ----
 

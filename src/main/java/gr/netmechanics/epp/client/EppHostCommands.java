@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 
 /**
  * Host commands (RFC3732), reached via {@link EppClient#hosts()}.
+ * Every command returns {@code null} if no EPP session could be established with the server.
  */
 public class EppHostCommands {
 

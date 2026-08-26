@@ -131,7 +131,7 @@ public class EppClient implements EppCommandSender {
     }
 
     /**
-     * Registrar commands (RFC3733).
+     * Registrar commands.
      *
      * @return the registrar command group
      */

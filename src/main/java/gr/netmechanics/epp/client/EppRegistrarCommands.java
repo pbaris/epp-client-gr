@@ -5,7 +5,8 @@ import gr.netmechanics.epp.client.impl.commands.info.registrar.RegistrarInfoRequ
 import org.springframework.lang.NonNull;
 
 /**
- * Registrar commands (RFC3733), reached via {@link EppClient#registrar()}.
+ * Registrar commands, reached via {@link EppClient#registrar()}.
+ * Every command returns {@code null} if no EPP session could be established with the server.
  */
 public class EppRegistrarCommands {
 
