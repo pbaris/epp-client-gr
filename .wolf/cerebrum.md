@@ -11,6 +11,19 @@
 ## Key Learnings
 
 - **Project:** epp-client-gr
+- [2026-08-13] `EppClient` uses a `ReentrantLock`-guarded connect sequence (no session-expiry
+  timer). Reconnect-on-2201 dedup pattern: a `volatile long sessionGeneration` bumped only inside
+  `login()` (always called under `connectionLock`, safe via reentrancy) lets a thread that loses
+  the race into `reconnect()` detect another thread already fixed the session and skip
+  tearing it down again — just compare `sessionGeneration` before/after acquiring the lock.
+- [2026-08-13] To isolate one test class under this project's Gradle setup (see CLAUDE.md), the
+  only way is to temporarily edit `build.gradle`'s `test { include '**/EppClientTestSuite.class' }`
+  line to point at the target class, since `--tests` filters intersect with (don't replace) that
+  include. Always restore it to `**/EppClientTestSuite.class` before finishing — verify via
+  `git diff build.gradle`.
+- [2026-08-13] `.superpowers/sdd/**` task/report files are gitignored (see
+  `.superpowers/sdd/.gitignore`), so edits there never show in `git status`/`git diff` — that's
+  expected, not a sign the edit failed.
 
 ## Do-Not-Repeat
 

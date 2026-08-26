@@ -3,11 +3,16 @@ package gr.netmechanics.epp.client;
 import static gr.netmechanics.epp.client.EppConstants.BEAN_EPP_CLIENT;
 import static gr.netmechanics.epp.client.impl.EppCommandRequest.request;
 
-import java.time.Instant;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 
 import gr.netmechanics.epp.client.error.EppGatewayException;
 import gr.netmechanics.epp.client.impl.EppCommandRequest;
 import gr.netmechanics.epp.client.impl.EppCommandResponse;
+import gr.netmechanics.epp.client.impl.EppResponseResult;
+import gr.netmechanics.epp.client.impl.EppResultCodes;
 import gr.netmechanics.epp.client.impl.commands.Hello;
 import gr.netmechanics.epp.client.impl.commands.LoginRequest;
 import gr.netmechanics.epp.client.impl.commands.LogoutRequest;
@@ -35,6 +40,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+/**
+ * Command methods (e.g. {@code checkDomains}, {@code createDomain}, ...) return {@code null}
+ * if no EPP session could be established with the server.
+ */
 @Slf4j
 @Component(BEAN_EPP_CLIENT)
 @RequiredArgsConstructor
@@ -43,9 +52,13 @@ public class EppClient {
     private final EppGateway eppGateway;
     private final EppSessionCookieStore cookieStore;
 
-    private EppPropertiesProvider eppProps;
-    private Instant sessionExpiresAt;
-    private Greeting greeting;
+    private final ReentrantLock connectionLock = new ReentrantLock();
+
+    private final AtomicReference<EppPropertiesProvider> eppProps = new AtomicReference<>();
+    private final AtomicReference<Greeting> greeting = new AtomicReference<>();
+    private final AtomicLong sessionGeneration = new AtomicLong();
+
+    private volatile boolean connected;
 
     //region Session (RFC3730)
 
@@ -56,11 +69,21 @@ public class EppClient {
      * @return the response from the EPP server containing the result of the login attempt
      */
     public EppCommandResponse login(@NonNull final LoginRequest loginRequest) {
-        if (isConnected()) {
-            logout();
-        }
+        connectionLock.lock();
+        try {
+            if (connected) {
+                logout();
+            }
 
-        return eppGateway.sendCommand(request(loginRequest, eppProps.getClTrId()));
+            EppCommandResponse response = eppGateway.sendCommand(request(loginRequest, eppProps.get().getClTrId()));
+            connected = response.isSuccess();
+            if (connected) {
+                sessionGeneration.incrementAndGet();
+            }
+            return response;
+        } finally {
+            connectionLock.unlock();
+        }
     }
 
     /**
@@ -68,11 +91,15 @@ public class EppClient {
      *
      * @return the response from the EPP server, indicating the result of the logout attempt
      */
-    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     public EppCommandResponse logout() {
-        EppCommandResponse cmd = sendCommandRequest(request(new LogoutRequest(), eppProps.getClTrId()));
-        clear();
-        return cmd;
+        connectionLock.lock();
+        try {
+            EppCommandResponse cmd = eppGateway.sendCommand(request(new LogoutRequest(), eppProps.get().getClTrId()));
+            clear();
+            return cmd;
+        } finally {
+            connectionLock.unlock();
+        }
     }
 
     /**
@@ -95,7 +122,7 @@ public class EppClient {
      * @return the response from the EPP server containing the domain information
      */
     public EppCommandResponse getDomainInfo(@NonNull final DomainInfoRequest infoRequest) {
-        return sendCommandRequest(request(infoRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(infoRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -106,7 +133,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the availability of the specified domain names
      */
     public EppCommandResponse checkDomains(@NonNull final DomainCheckRequest checkRequest) {
-        return sendCommandRequest(request(checkRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(checkRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -116,7 +143,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the domain creation process
      */
     public EppCommandResponse createDomain(@NonNull final DomainCreateRequest createRequest) {
-        return sendCommandRequest(request(createRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(createRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -127,7 +154,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the domain update process
      */
     public EppCommandResponse updateDomain(@NonNull final DomainUpdateRequest updateRequest) {
-        return sendCommandRequest(request(updateRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(updateRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -138,7 +165,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the domain renewal process
      */
     public EppCommandResponse renewDomain(@NonNull final DomainRenewRequest renewRequest) {
-        return sendCommandRequest(request(renewRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(renewRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -149,7 +176,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the domain transfer process
      */
     public EppCommandResponse transferDomain(@NonNull final DomainTransferRequest transferRequest) {
-        return sendCommandRequest(request(transferRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(transferRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -159,7 +186,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the domain deletion process
      */
     public EppCommandResponse deleteDomain(@NonNull final DomainDeleteRequest deleteRequest) {
-        return sendCommandRequest(request(deleteRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(deleteRequest, eppProps.get().getClTrId()));
     }
     //endregion
 
@@ -172,7 +199,7 @@ public class EppClient {
      * @return the response from the EPP server containing the host information
      */
     public EppCommandResponse getHostInfo(@NonNull final HostInfoRequest infoRequest) {
-        return sendCommandRequest(request(infoRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(infoRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -183,7 +210,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the availability of the specified hostnames
      */
     public EppCommandResponse checkHosts(@NonNull final HostCheckRequest checkRequest) {
-        return sendCommandRequest(request(checkRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(checkRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -193,7 +220,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the host creation process
      */
     public EppCommandResponse createHost(@NonNull final HostCreateRequest createRequest) {
-        return sendCommandRequest(request(createRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(createRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -204,7 +231,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the host update process
      */
     public EppCommandResponse updateHost(@NonNull final HostUpdateRequest updateRequest) {
-        return sendCommandRequest(request(updateRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(updateRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -214,7 +241,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the host deletion process
      */
     public EppCommandResponse deleteHost(@NonNull final HostDeleteRequest deleteRequest) {
-        return sendCommandRequest(request(deleteRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(deleteRequest, eppProps.get().getClTrId()));
     }
     //endregion
 
@@ -227,7 +254,7 @@ public class EppClient {
      * @return the response from the EPP server containing the contact information
      */
     public EppCommandResponse getContactInfo(@NonNull final ContactInfoRequest infoRequest) {
-        return sendCommandRequest(request(infoRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(infoRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -237,7 +264,7 @@ public class EppClient {
      * @return the response from the EPP server containing the registrar information
      */
     public EppCommandResponse getRegistrarInfo(@NonNull final RegistrarInfoRequest infoRequest) {
-        return sendCommandRequest(request(infoRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(infoRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -248,7 +275,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the availability of the specified contact IDs
      */
     public EppCommandResponse checkContacts(@NonNull final ContactCheckRequest checkRequest) {
-        return sendCommandRequest(request(checkRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(checkRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -258,7 +285,7 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the contact creation process
      */
     public EppCommandResponse createContact(@NonNull final ContactCreateRequest createRequest) {
-        return sendCommandRequest(request(createRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(createRequest, eppProps.get().getClTrId()));
     }
 
     /**
@@ -269,49 +296,76 @@ public class EppClient {
      * @return the response from the EPP server indicating the result of the contact update process
      */
     public EppCommandResponse updateContact(@NonNull final ContactUpdateRequest updateRequest) {
-        return sendCommandRequest(request(updateRequest, eppProps.getClTrId()));
+        return sendCommandRequest(request(updateRequest, eppProps.get().getClTrId()));
     }
     //endregion
 
     private EppCommandResponse sendCommandRequest(@NonNull final EppCommandRequest command) {
-        if (isSessionValid()) {
-            sessionExpiresAt = Instant.now().plusSeconds(13 * 60);
+        ensureConnected();
+
+        // Prevent gateway invocation if connect attempt failed, matching EppClientSessionTest#hello_failure_during_connect_does_not_throw
+        if (!connected) {
+            log.error("Not connected to the EPP server, command not sent: {}", command);
+            return null;
         }
 
-        return eppGateway.sendCommand(command);
+        long seenGeneration = sessionGeneration.get();
+        EppCommandResponse response = eppGateway.sendCommand(command);
+        if (isAuthorizationError(response) && reconnect(seenGeneration)) {
+            response = eppGateway.sendCommand(command);
+        }
+
+        return response;
     }
 
-    private boolean isSessionValid() {
-        if (!isConnected()) {
-            log.debug("Connection not established or wrong, try to connect");
+    private void ensureConnected() {
+        if (connected) {
+            return;
+        }
+
+        connectionLock.lock();
+        try {
+            if (!connected) {
+                connect();
+            }
+        } finally {
+            connectionLock.unlock();
+        }
+    }
+
+    private boolean reconnect(final long seenGeneration) {
+        connectionLock.lock();
+        try {
+            if (connected && sessionGeneration.get() != seenGeneration) {
+                log.debug("Session was already reconnected by another thread, retrying without reconnecting again");
+                return true;
+            }
+
+            log.debug("Session appears to have expired, reconnecting");
+            clear();
             return connect();
+        } finally {
+            connectionLock.unlock();
         }
-        return true;
-    }
-
-    private boolean isConnected() {
-        if (sessionExpiresAt == null || Instant.now().isAfter(sessionExpiresAt)) {
-            return false;
-        }
-
-        return getGreeting() != null;
     }
 
     private boolean connect() {
-        clear();
-
         Greeting greet = getGreeting();
+        if (greet == null) {
+            return false;
+        }
 
-        String language = eppProps.getLanguage();
+        EppPropertiesProvider props = eppProps.get();
+        String language = props.getLanguage();
         if (!greet.getLanguages().contains(language)) {
             language = greet.getDefaultLanguage();
         }
 
         LoginRequest loginRequest = LoginRequest.builder()
-            .clientId(eppProps.getClientId())
-            .password(eppProps.getPassword())
+            .clientId(props.getClientId())
+            .password(props.getPassword())
             .language(language)
-            .version(greeting.getVersion())
+            .version(greet.getVersion())
             .objectUris(greet.getObjectUris())
             .build();
 
@@ -319,29 +373,47 @@ public class EppClient {
     }
 
     private Greeting getGreeting() {
-        if (greeting == null) {
+        if (greeting.get() == null) {
             try {
-                greeting = hello();
+                greeting.set(hello());
 
             } catch (EppGatewayException e) {
                 log.error("Checking with hello failed, we are not connected, returning false!");
             }
         }
 
-        return greeting;
+        return greeting.get();
+    }
+
+    private boolean isAuthorizationError(final EppCommandResponse response) {
+        if (response.isSuccess()) {
+            return false;
+        }
+
+        List<EppResponseResult> results = response.getResults();
+        return results != null && !results.isEmpty()
+            && results.getFirst().getCode() == EppResultCodes.AUTHORIZATION_ERROR;
     }
 
     private void clear() {
-        sessionExpiresAt = null;
-        greeting = null;
+        connected = false;
+        greeting.set(null);
         cookieStore.clear();
     }
 
     @Autowired
     void setEppProps(final EppPropertiesProvider eppProps) {
-        this.eppProps = eppProps;
-        if (sessionExpiresAt != null || greeting != null) {
-            logout();
+        connectionLock.lock();
+        try {
+            boolean hadSession = connected;
+            this.eppProps.set(eppProps);
+            if (hadSession) {
+                logout();
+            } else {
+                clear();
+            }
+        } finally {
+            connectionLock.unlock();
         }
     }
 }

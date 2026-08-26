@@ -12,28 +12,28 @@ public interface EppBuilder {
 
     <T> T build();
 
-    static <T> T requireNonNull(T obj, String message) {
+    static <T> T requireNonNull(final T obj, final String message) {
         if (obj == null) {
             throw new IllegalArgumentException(message);
         }
         return obj;
     }
 
-    static String requireNonEmpty(String value, String message) {
+    static String requireNonEmpty(final String value, final String message) {
         if (!StringUtils.hasText(value)) {
             throw new IllegalArgumentException(message);
         }
         return value;
     }
 
-    static List<String> requireNonEmpty(List<String> values, String message) {
+    static List<String> requireNonEmpty(final List<String> values, final String message) {
         if (CollectionUtils.isEmpty(values)) {
             throw new IllegalArgumentException(message);
         }
         return values;
     }
 
-    static String requireNonEmptyMax(String value, int max, String message) {
+    static String requireNonEmptyMax(final String value, final int max, final String message) {
         String nonEmptyValue = requireNonEmpty(value, message);
 
         if (nonEmptyValue.length() > max) {
@@ -42,7 +42,7 @@ public interface EppBuilder {
         return nonEmptyValue;
     }
 
-    static List<String> requireNonEmptyMax(List<String> values, int max, String message) {
+    static List<String> requireNonEmptyMax(final List<String> values, final int max, final String message) {
         List<String> nonEmptyValues = requireNonEmpty(values, message);
 
         if (nonEmptyValues.size() > max) {
@@ -51,7 +51,7 @@ public interface EppBuilder {
         return nonEmptyValues;
     }
 
-    static int requireYears(int years) {
+    static int requireYears(final int years) {
         if (years % 2 != 0 || years < 2 || years > 10) {
             throw new IllegalArgumentException("Renewal years must be an even number between 2 and 10");
         }
