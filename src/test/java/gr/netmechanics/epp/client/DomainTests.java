@@ -19,6 +19,7 @@ import gr.netmechanics.epp.client.impl.commands.info.domain.DomainInfoResponse;
 import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewRequest;
 import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewResponse;
 import gr.netmechanics.epp.client.impl.commands.transfer.domain.DomainTransferRequest;
+import gr.netmechanics.epp.client.impl.commands.update.domain.BundleRecordType;
 import gr.netmechanics.epp.client.impl.commands.update.domain.DomainUpdateRequest;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.SecDnsExtension;
@@ -377,5 +378,47 @@ class DomainTests extends EppClientTestBase {
 
         assertThat(xmlUtil.toXml(request(deleteRequest, eppProps.getClTrId())))
             .isEqualTo(xmlUtil.xmlFromFile("domain_delete_recall_request.xml"));
+    }
+
+    @Test
+    @Order(22)
+    void test_domain_update_change_record_type_marshalling() throws Exception {
+        var updateRequest = DomainUpdateRequest.builder()
+            .domainName("ιτε.gr")
+            .changeRecordType(List.of(
+                new DomainExtension.RecordTypeChange("ίτε.gr", BundleRecordType.DOMAIN),
+                new DomainExtension.RecordTypeChange("ιτέ.gr", BundleRecordType.DNAME)))
+            .build();
+
+        String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
+        assertThat(xml).contains("<domain:name>ιτε.gr</domain:name>");
+        assertThat(xml).doesNotContain("<domain:chg>");
+        assertThat(xml).contains("<extdomain:chg>");
+        assertThat(xml).contains("<extdomain:record>");
+        assertThat(xml).contains("<extdomain:recordType type=\"domain\">ίτε.gr</extdomain:recordType>");
+        assertThat(xml).contains("<extdomain:recordType type=\"dname\">ιτέ.gr</extdomain:recordType>");
+    }
+
+    @Test
+    @Order(23)
+    void test_domain_update_change_record_type_conflicting_operation_rejected() {
+        var builder = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .changeOwner("714_epp-client-r");
+
+        assertThatThrownBy(() -> builder.changeRecordType(List.of(
+                new DomainExtension.RecordTypeChange("epp-client.gr", BundleRecordType.DOMAIN))))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessageContaining("Only one of issueToken/changeOwner/changeOwnerName/changeRecordType");
+    }
+
+    @Test
+    @Order(24)
+    void test_domain_update_change_record_type_requires_non_empty_list() {
+        var builder = DomainUpdateRequest.builder().domainName("epp-client.gr");
+
+        assertThatThrownBy(() -> builder.changeRecordType(List.of()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("At least one record type change must be specified");
     }
 }

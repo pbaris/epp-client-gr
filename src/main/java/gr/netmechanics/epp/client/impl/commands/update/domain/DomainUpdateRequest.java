@@ -28,8 +28,6 @@ import org.apache.commons.collections.CollectionUtils;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//TODO Αλλαγή του Τύπου Εγγραφής Δεσμευμένης Μορφής Ονόματος Χώρου ...................... 52
-//TODO Προσθήκη/Κατάργηση Εγγραφών DS ................................................... 53
 public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExtension {
 
     @JacksonXmlProperty(localName = "domain:name")
@@ -159,10 +157,18 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
             return this;
         }
 
+        public DomainUpdateRequestBuilder changeRecordType(final List<DomainExtension.RecordTypeChange> recordTypeChanges) {
+            if (CollectionUtils.isEmpty(recordTypeChanges)) {
+                throw new IllegalArgumentException("At least one record type change must be specified");
+            }
+            setSingleExtension(new DomainExtension(recordTypeChanges));
+            return this;
+        }
+
         private void setSingleExtension(final EppExtension newExtension) {
             if (this.extension != null) {
                 throw new IllegalStateException(
-                    "Only one of issueToken/changeOwner/changeOwnerName can be requested per domain update");
+                    "Only one of issueToken/changeOwner/changeOwnerName/changeRecordType can be requested per domain update");
             }
             this.extension = newExtension;
         }
@@ -186,9 +192,11 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
             if (extension instanceof DomainIssueTokenExtension) {
                 req.extensions.add(extension);
 
-            } else if (extension instanceof DomainExtension) {
+            } else if (extension instanceof DomainExtension domainExtension) {
                 req.extensions.add(extension);
-                req.changes = new ChangesNode(null, null, requireNonEmpty(registrant, "Registrant ID must be specified"));
+                if (domainExtension.getOperation() != null) {
+                    req.changes = new ChangesNode(null, null, requireNonEmpty(registrant, "Registrant ID must be specified"));
+                }
 
             } else {
                 buildPlainUpdate(req);
