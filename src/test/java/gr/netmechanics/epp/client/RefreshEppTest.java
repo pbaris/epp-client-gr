@@ -23,7 +23,7 @@ class RefreshEppTest extends EppClientTestBase {
     }
 
     private void checkDomainInfo() {
-        assertCommandSuccess(eppClient.getDomainInfo(DomainInfoRequest.builder()
+        assertCommandSuccess(eppClient.domains().info(DomainInfoRequest.builder()
             .domainName("epp-client.gr")
             .build()));
     }

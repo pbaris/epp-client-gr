@@ -146,7 +146,7 @@ class DomainTests extends EppClientTestBase {
             .billingContacts(List.of("714_epp-client-b"))
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.createDomain(createRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().create(createRequest));
 
         assertThat(cmd.<DomainCreateResponse>getCreateResponse()).satisfies(create -> {
             assertThat(create).isNotNull();
@@ -161,7 +161,7 @@ class DomainTests extends EppClientTestBase {
             .domainName("epp-client-test1.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.getDomainInfo(infoRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().info(infoRequest));
 
         assertThat(cmd.<DomainInfoResponse>getInfoResponse()).satisfies(info -> {
             assertThat(info).isNotNull();
@@ -203,7 +203,7 @@ class DomainTests extends EppClientTestBase {
             .domainNames("epp-client.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkDomains(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().check(checkRequest));
 
         assertThat(cmd.<DomainCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -226,7 +226,7 @@ class DomainTests extends EppClientTestBase {
             .domainNames("epp-client.gr", "epp-client-test1.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkDomains(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().check(checkRequest));
 
         assertThat(cmd.<DomainCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -254,7 +254,7 @@ class DomainTests extends EppClientTestBase {
             .domainName("epp-client-test1.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.getDomainInfo(infoRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().info(infoRequest));
 
         DomainInfoResponse info = cmd.getInfoResponse();
         LocalDate currentExpirationDate = info.getAudit().getExpirationDate();
@@ -266,7 +266,7 @@ class DomainTests extends EppClientTestBase {
             .years(yearsToRenew)
             .build();
 
-        cmd = assertCommandSuccess(eppClient.renewDomain(renewRequest));
+        cmd = assertCommandSuccess(eppClient.domains().renew(renewRequest));
 
         assertThat(cmd.<DomainRenewResponse>getRenewResponse()).satisfies(renew -> {
             assertThat(renew).isNotNull();
@@ -287,7 +287,7 @@ class DomainTests extends EppClientTestBase {
             .nameServersToAdd(List.of("ns1.epp-client.gr", "ns2.epp-client.gr"))
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
 
         // reset state
         updateRequest = DomainUpdateRequest.builder()
@@ -297,7 +297,7 @@ class DomainTests extends EppClientTestBase {
             .nameServersToRemove(List.of("ns1.epp-client.gr", "ns2.epp-client.gr"))
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
     }
 
     @Test
@@ -308,7 +308,7 @@ class DomainTests extends EppClientTestBase {
             .changeOwner("714_epp-client-o")
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
     }
 
     @Test
@@ -319,7 +319,7 @@ class DomainTests extends EppClientTestBase {
             .changeOwnerName("714_epp-client-r")
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
     }
 
     @Test

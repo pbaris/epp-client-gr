@@ -27,7 +27,7 @@ class RegistrarTests extends EppClientTestBase {
     void test_registrar_info() {
         var infoRequest = new RegistrarInfoRequest();
 
-        var cmd = assertCommandSuccess(eppClient.getRegistrarInfo(infoRequest));
+        var cmd = assertCommandSuccess(eppClient.registrar().info(infoRequest));
 
         assertThat(cmd.<RegistrarInfoResponse>getInfoResponse()).satisfies(info -> {
             assertThat(info).isNotNull();

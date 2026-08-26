@@ -92,7 +92,7 @@ class HostTests extends EppClientTestBase {
             .addresses(List.of("122.122.122.122", "1080:0:0:0:8:800:200C:417A"))
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.createHost(createRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.hosts().create(createRequest));
         assertThat(cmd.<HostCreateResponse>getCreateResponse().getName()).isEqualTo(HOST1);
 
         createRequest = HostCreateRequest.builder()
@@ -100,7 +100,7 @@ class HostTests extends EppClientTestBase {
             .addresses(List.of("122.122.122.122", "1080:0:0:0:8:800:200C:417A"))
             .build();
 
-        cmd = assertCommandSuccess(eppClient.createHost(createRequest));
+        cmd = assertCommandSuccess(eppClient.hosts().create(createRequest));
         assertThat(cmd.<HostCreateResponse>getCreateResponse().getName()).isEqualTo(HOST2);
     }
 
@@ -112,7 +112,7 @@ class HostTests extends EppClientTestBase {
             .addresses(List.of("122.122.122.122", "1080:0:0:0:8:800:200C:417A"))
             .build();
 
-        EppCommandResponse cmd = assertCommandFail(eppClient.createHost(createRequest));
+        EppCommandResponse cmd = assertCommandFail(eppClient.hosts().create(createRequest));
         assertCommentEqual(cmd, "Το γονικό όνομα χώρου του εξυπηρετητή δεν είναι ορισμένο στο σύστημα ή είναι περιορισμένη η χρήση του.");
     }
 
@@ -126,14 +126,14 @@ class HostTests extends EppClientTestBase {
             .addressesToRemove(List.of("122.122.122.122", "1080:0:0:0:8:800:200C:417A"))
             .build();
 
-        assertCommandSuccess(eppClient.updateHost(updateRequest));
+        assertCommandSuccess(eppClient.hosts().update(updateRequest));
 
         updateRequest = HostUpdateRequest.builder()
             .hostName("ns12.epp-client.gr")
             .hostNewName(HOST1)
             .build();
 
-        assertCommandSuccess(eppClient.updateHost(updateRequest));
+        assertCommandSuccess(eppClient.hosts().update(updateRequest));
     }
 
     @Test
@@ -143,7 +143,7 @@ class HostTests extends EppClientTestBase {
             .hostName(HOST1)
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.getHostInfo(infoRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.hosts().info(infoRequest));
 
         assertThat(cmd.<HostInfoResponse>getInfoResponse()).satisfies(info -> {
             assertThat(info).isNotNull();
@@ -158,7 +158,7 @@ class HostTests extends EppClientTestBase {
             .hostNames(HOST1)
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkHosts(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.hosts().check(checkRequest));
 
         assertThat(cmd.<HostCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -183,7 +183,7 @@ class HostTests extends EppClientTestBase {
             .hostNames(HOST1, HOST2)
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkHosts(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.hosts().check(checkRequest));
 
         assertThat(cmd.<HostCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -207,11 +207,11 @@ class HostTests extends EppClientTestBase {
     @Test
     @Order(12)
     void test_host_delete() {
-        assertCommandSuccess(eppClient.deleteHost(HostDeleteRequest.builder()
+        assertCommandSuccess(eppClient.hosts().delete(HostDeleteRequest.builder()
             .hostName(HOST1)
             .build()));
 
-        assertCommandSuccess(eppClient.deleteHost(HostDeleteRequest.builder()
+        assertCommandSuccess(eppClient.hosts().delete(HostDeleteRequest.builder()
             .hostName(HOST2)
             .build()));
     }

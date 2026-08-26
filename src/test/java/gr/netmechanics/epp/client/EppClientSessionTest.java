@@ -47,7 +47,7 @@ class EppClientSessionTest {
         for (int i = 0; i < threadCount; i++) {
             Callable<EppCommandResponse> task = () -> {
                 go.await();
-                return client.checkDomains(DomainCheckRequest.builder().domainNames("example.gr").build());
+                return client.domains().check(DomainCheckRequest.builder().domainNames("example.gr").build());
             };
             futures.add(pool.submit(task));
         }
@@ -76,7 +76,7 @@ class EppClientSessionTest {
         EppClient client = new EppClient(gateway, new EppSessionCookieStore());
         client.setEppProps(fixedProvider());
 
-        EppCommandResponse response = client.checkDomains(
+        EppCommandResponse response = client.domains().check(
             DomainCheckRequest.builder().domainNames("example.gr").build());
 
         assertThat(response.isSuccess()).isTrue();
@@ -92,7 +92,7 @@ class EppClientSessionTest {
         EppClient client = new EppClient(gateway, new EppSessionCookieStore());
         client.setEppProps(fixedProvider());
 
-        EppCommandResponse response = client.checkDomains(
+        EppCommandResponse response = client.domains().check(
             DomainCheckRequest.builder().domainNames("example.gr").build());
 
         assertThat(response.isSuccess()).isFalse();
@@ -114,7 +114,7 @@ class EppClientSessionTest {
         CountDownLatch go = new CountDownLatch(1);
         Callable<EppCommandResponse> task = () -> {
             go.await();
-            return client.checkDomains(DomainCheckRequest.builder().domainNames("example.gr").build());
+            return client.domains().check(DomainCheckRequest.builder().domainNames("example.gr").build());
         };
 
         Future<EppCommandResponse> futureA = pool.submit(task);
@@ -155,7 +155,7 @@ class EppClientSessionTest {
         EppClient client = new EppClient(gateway, new EppSessionCookieStore());
         client.setEppProps(fixedProvider());
 
-        assertThat(client.checkDomains(DomainCheckRequest.builder().domainNames("example.gr").build())).isNull();
+        assertThat(client.domains().check(DomainCheckRequest.builder().domainNames("example.gr").build())).isNull();
     }
 
     private static EppPropertiesProvider fixedProvider() {
