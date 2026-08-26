@@ -101,42 +101,42 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
         }
 
         public DomainUpdateRequestBuilder nameServersToAdd(final List<String> nameServersAdd) {
-            this.nameServersAdd = nameServersAdd;
+            this.nameServersAdd = copyOf(nameServersAdd);
             return this;
         }
 
         public DomainUpdateRequestBuilder nameServersToRemove(final List<String> nameServersRemove) {
-            this.nameServersRemove = nameServersRemove;
+            this.nameServersRemove = copyOf(nameServersRemove);
             return this;
         }
 
         public DomainUpdateRequestBuilder adminContactsToAdd(final List<String> adminContactsAdd) {
-            this.adminContactsAdd = adminContactsAdd;
+            this.adminContactsAdd = copyOf(adminContactsAdd);
             return this;
         }
 
         public DomainUpdateRequestBuilder adminContactsToRemove(final List<String> adminContactsRemove) {
-            this.adminContactsRemove = adminContactsRemove;
+            this.adminContactsRemove = copyOf(adminContactsRemove);
             return this;
         }
 
         public DomainUpdateRequestBuilder techContactsToAdd(final List<String> techContactsAdd) {
-            this.techContactsAdd = techContactsAdd;
+            this.techContactsAdd = copyOf(techContactsAdd);
             return this;
         }
 
         public DomainUpdateRequestBuilder techContactsToRemove(final List<String> techContactsRemove) {
-            this.techContactsRemove = techContactsRemove;
+            this.techContactsRemove = copyOf(techContactsRemove);
             return this;
         }
 
         public DomainUpdateRequestBuilder billingContactsToAdd(final List<String> billingContactsAdd) {
-            this.billingContactsAdd = billingContactsAdd;
+            this.billingContactsAdd = copyOf(billingContactsAdd);
             return this;
         }
 
         public DomainUpdateRequestBuilder billingContactsToRemove(final List<String> billingContactsRemove) {
-            this.billingContactsRemove = billingContactsRemove;
+            this.billingContactsRemove = copyOf(billingContactsRemove);
             return this;
         }
 
@@ -161,7 +161,7 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
             if (CollectionUtils.isEmpty(recordTypeChanges)) {
                 throw new IllegalArgumentException("At least one record type change must be specified");
             }
-            setSingleExtension(new DomainExtension(recordTypeChanges));
+            setSingleExtension(new DomainExtension(copyOf(recordTypeChanges)));
             return this;
         }
 
@@ -174,13 +174,17 @@ public class DomainUpdateRequest implements DomainSchema, UpdateRequest, HasExte
         }
 
         public DomainUpdateRequestBuilder dsToAdd(final List<SecDnsExtension.DsData> dsToAdd) {
-            this.dsToAdd = dsToAdd;
+            this.dsToAdd = copyOf(dsToAdd);
             return this;
         }
 
         public DomainUpdateRequestBuilder dsToRemove(final List<SecDnsExtension.DsData> dsToRemove) {
-            this.dsToRemove = dsToRemove;
+            this.dsToRemove = copyOf(dsToRemove);
             return this;
+        }
+
+        private static <T> List<T> copyOf(final List<T> values) {
+            return values != null ? List.copyOf(values) : null;
         }
 
         @Override

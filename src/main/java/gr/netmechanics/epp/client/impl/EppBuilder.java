@@ -30,7 +30,7 @@ public interface EppBuilder {
         if (CollectionUtils.isEmpty(values)) {
             throw new IllegalArgumentException(message);
         }
-        return values;
+        return List.copyOf(values);
     }
 
     static String requireNonEmptyMax(final String value, final int max, final String message) {

@@ -13,7 +13,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpResponse;
 
-public class EppCookieInterceptorTest {
+class EppCookieInterceptorTest {
 
     @Test
     void strips_set_cookie_attributes_and_stores_only_name_value_pair() throws Exception {

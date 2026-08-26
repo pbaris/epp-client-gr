@@ -89,7 +89,7 @@ public class LoginRequest implements EppRequest {
         }
 
         public LoginRequestBuilder objectUris(final List<String> objectUris) {
-            this.objectUris = objectUris;
+            this.objectUris = objectUris != null ? List.copyOf(objectUris) : null;
             return this;
         }
 

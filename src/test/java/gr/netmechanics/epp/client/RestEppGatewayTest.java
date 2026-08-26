@@ -86,7 +86,8 @@ class RestEppGatewayTest {
             .andExpect(method(HttpMethod.POST))
             .andRespond(withServerError());
 
-        assertThatThrownBy(() -> gateway.hello(new Hello()))
+        Hello hello = new Hello();
+        assertThatThrownBy(() -> gateway.hello(hello))
             .isInstanceOf(EppGatewayException.class);
 
         mockServer.verify();

@@ -45,7 +45,7 @@ public class HostCreateRequest implements HostSchema, CreateRequest {
         }
 
         public HostCreateRequestBuilder addresses(final List<String> addresses) {
-            this.addresses = addresses;
+            this.addresses = addresses != null ? List.copyOf(addresses) : null;
             return this;
         }
 
