@@ -92,7 +92,18 @@ won't survive across requests and every command will silently fail to stay authe
 
 === EppClient
 
-Inject/Autowire the EppClient to your code.
+Inject/Autowire the EppClient to your code. Commands are grouped by object type:
+
+[source,java]
+----
+eppClient.domains().check(DomainCheckRequest.builder().domainNames("example.gr").build());
+eppClient.hosts().info(HostInfoRequest.builder().hostName("ns1.example.gr").build());
+eppClient.contacts().create(ContactCreateRequest.builder()...build());
+eppClient.registrar().info(new RegistrarInfoRequest());
+----
+
+Session management (`login`, `logout`, `hello`) stays directly on `EppClient` and is handled
+automatically — you don't need to call it yourself in normal use.
 
 == Implementation Status
 
