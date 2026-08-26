@@ -13,6 +13,8 @@ public class EppProperties {
     @Getter private String password;
     @Getter private String language;
     @Getter private boolean useSandbox;
+    @Getter private long connectTimeoutMillis;
+    @Getter private long readTimeoutMillis;
 
     // should be changed for test and debug
     private Long clTrId;
@@ -22,12 +24,16 @@ public class EppProperties {
         final String password,
         @DefaultValue("el") final String language,
         @DefaultValue("true") final boolean useSandbox,
+        @DefaultValue("10000") final long connectTimeoutMillis,
+        @DefaultValue("30000") final long readTimeoutMillis,
         final Long clTrId) {
 
         this.clientId = clientId;
         this.password = password;
         this.language = language;
         this.useSandbox = useSandbox;
+        this.connectTimeoutMillis = connectTimeoutMillis;
+        this.readTimeoutMillis = readTimeoutMillis;
         this.clTrId = clTrId;
     }
 

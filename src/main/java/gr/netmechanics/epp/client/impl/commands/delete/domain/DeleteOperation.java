@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum DeleteOperation {
     DOMAIN("deleteDomain"),
     HOMOGRAPH("deleteHomograph"),
-    RECALL("deleteHomograph");
+    RECALL("recallApplication");
 
     private final String xmlName;
 

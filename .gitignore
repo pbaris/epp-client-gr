@@ -36,5 +36,13 @@ out/
 ### VS Code ###
 .vscode/
 
+### Git worktrees ###
+.worktrees/
+
+### OpenWolf ###
+.wolf/*
+!.wolf/cerebrum.md
+!.wolf/config.json
+
 ### Others ###
 /src/test/resources/application.properties

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -14,43 +15,47 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.github.underscore.U;
 import com.github.underscore.Xml;
 import gr.netmechanics.epp.client.error.EppGatewayException;
-import gr.netmechanics.epp.client.impl.EppCommandResponse;
-import gr.netmechanics.epp.client.impl.elements.Greeting;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.integration.transformer.AbstractPayloadTransformer;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
-public class XMLToObjectTransformer extends AbstractPayloadTransformer<String, Object> {
+public class EppXmlCodec {
+
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("(?s)(<((?:\\w+:)?(?:pw|newPW))>).*?(</\\2>)");
 
     private final XmlMapper xmlMapper;
 
-    @Override
-    protected Object transformPayload(final String payload) {
-        if (log.isDebugEnabled()) {
-            log.debug("Received message:\n{}\n", minifyXml(payload));
-        }
-
+    public String marshal(final Object payload) {
         try {
-            return xmlMapper.readValue(payload, getReturnType(payload));
+            String xml = xmlMapper.writeValueAsString(payload);
+            if (log.isDebugEnabled()) {
+                log.debug("Sending message:\n{}\n", redact(xml));
+            }
+            return xml;
+
+        } catch (Exception e) {
+            throw new EppGatewayException("Failed to marshal XML", e);
+        }
+    }
+
+    public <T> T unmarshal(final String payload, final Class<T> type) {
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("Received message:\n{}\n", redact(minifyXml(payload)));
+            }
+            return xmlMapper.readValue(payload, type);
 
         } catch (Exception e) {
             throw new EppGatewayException("Failed to unmarshal XML", e);
         }
     }
 
-    private Class<?> getReturnType(final String payload) {
-        if (payload.contains("</greeting>")) {
-            return Greeting.class;
-        }
-
-        if (payload.contains("</response>")) {
-            return EppCommandResponse.class;
-        }
-
-        return null;
+    static String redact(final String xml) {
+        return PASSWORD_PATTERN.matcher(xml).replaceAll("$1***REDACTED***$3");
     }
 
     @SneakyThrows

@@ -1,16 +1,12 @@
 package gr.netmechanics.epp.client;
 
-import static gr.netmechanics.epp.client.EppConstants.HTTP_REQUEST_CHANNEL;
-
 import gr.netmechanics.epp.client.error.EppGatewayException;
 import gr.netmechanics.epp.client.impl.EppCommandRequest;
 import gr.netmechanics.epp.client.impl.EppCommandResponse;
 import gr.netmechanics.epp.client.impl.commands.Hello;
 import gr.netmechanics.epp.client.impl.elements.Greeting;
-import org.springframework.integration.annotation.MessagingGateway;
 
-@MessagingGateway(defaultRequestChannel = HTTP_REQUEST_CHANNEL)
-public interface EppGateway {
+interface EppGateway {
 
     /**
      * Sends a Hello message to the EPP server and receives a server greeting.

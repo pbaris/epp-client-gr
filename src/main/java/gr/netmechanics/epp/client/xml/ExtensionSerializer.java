@@ -12,6 +12,7 @@ import gr.netmechanics.epp.client.impl.elements.ext.DomainDeleteExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainIssueTokenExtension;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainTransferExtension;
+import gr.netmechanics.epp.client.impl.elements.ext.SecDnsExtension;
 
 public class ExtensionSerializer<T extends EppExtension> extends JsonSerializer<T> {
 
@@ -35,6 +36,10 @@ public class ExtensionSerializer<T extends EppExtension> extends JsonSerializer<
         } else if (value instanceof DomainIssueTokenExtension) {
             xmlGen.setNextName(new QName(null, "dacor:issueToken"));
             valueType = DomainIssueTokenExtension.class;
+
+        } else if (value instanceof SecDnsExtension) {
+            xmlGen.setNextName(new QName(null, "secDNS:update"));
+            valueType = SecDnsExtension.class;
         }
 
         if (valueType != null) {

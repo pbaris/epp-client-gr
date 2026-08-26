@@ -70,7 +70,7 @@ public class DomainCreateRequest implements DomainSchema, CreateRequest {
         }
 
         public DomainCreateRequestBuilder nameServers(final List<String> nameServers) {
-            this.nameServers = nameServers;
+            this.nameServers = copyOf(nameServers);
             return this;
         }
 
@@ -80,18 +80,22 @@ public class DomainCreateRequest implements DomainSchema, CreateRequest {
         }
 
         public DomainCreateRequestBuilder adminContacts(final List<String> contacts) {
-            this.adminContacts = contacts;
+            this.adminContacts = copyOf(contacts);
             return this;
         }
 
         public DomainCreateRequestBuilder techContacts(final List<String> contacts) {
-            this.techContacts = contacts;
+            this.techContacts = copyOf(contacts);
             return this;
         }
 
         public DomainCreateRequestBuilder billingContacts(final List<String> contacts) {
-            this.billingContacts = contacts;
+            this.billingContacts = copyOf(contacts);
             return this;
+        }
+
+        private static <T> List<T> copyOf(final List<T> values) {
+            return values != null ? List.copyOf(values) : null;
         }
 
         @Override

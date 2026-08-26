@@ -3,6 +3,9 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'org.sonarqube' version '6.0.1.5171'
     id 'org.springframework.boot' version '3.5.3' apply false
     id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -37,7 +40,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.integration:spring-integration-http'
+    implementation 'org.springframework:spring-web'
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
@@ -53,6 +56,50 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.junit.platform:junit-platform-suite'
 }
+
+// ─── Checkstyle ──────────────────────────────────────────────────────────────
+
+checkstyle {
+    toolVersion = '13.4.1'
+    configFile = file("${rootDir}/checkstyle.xml")
+    ignoreFailures = false
+    showViolations = true
+}
+
+tasks.withType(Checkstyle).configureEach {
+    reports {
+        xml.required = true
+        html.required = false
+    }
+}
+
+// ─── JaCoCo ──────────────────────────────────────────────────────────────────
+
+jacoco {
+    toolVersion = '0.8.14'
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = false
+        csv.required = false
+    }
+}
+
+// ─── SonarQube ───────────────────────────────────────────────────────────────
+
+sonar {
+    properties {
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
+        // Sonar picks up your Checkstyle config automatically if present at:
+        // config/checkstyle/checkstyle.xml — or set it explicitly:
+        // property 'sonar.java.checkstyle.reportPaths', "${layout.buildDirectory.get()}/reports/checkstyle/main.xml"
+    }
+}
+
+// ─── Publishing ───────────────────────────────────────────────────────────────
 
 publishing {
     repositories {
@@ -99,18 +146,21 @@ publishing {
     }
 }
 
+// ─── Compiler ─────────────────────────────────────────────────────────────────
+
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add("-parameters")
 }
 
-// Test configuration
+// ─── Tests ────────────────────────────────────────────────────────────────────
+
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
 
     // Support both -PskipTests=true and -DskipTests=true
     def skip = project.findProperty("skipTests")?.toString()?.toBoolean() || Boolean.getBoolean("skipTests")
-
     onlyIf { !skip }
 
     include '**/EppClientTestSuite.class'
+    finalizedBy jacocoTestReport
 }

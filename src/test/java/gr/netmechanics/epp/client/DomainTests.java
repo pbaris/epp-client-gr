@@ -2,6 +2,7 @@ package gr.netmechanics.epp.client;
 
 import static gr.netmechanics.epp.client.impl.EppCommandRequest.request;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,8 +19,10 @@ import gr.netmechanics.epp.client.impl.commands.info.domain.DomainInfoResponse;
 import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewRequest;
 import gr.netmechanics.epp.client.impl.commands.renew.domain.DomainRenewResponse;
 import gr.netmechanics.epp.client.impl.commands.transfer.domain.DomainTransferRequest;
+import gr.netmechanics.epp.client.impl.commands.update.domain.BundleRecordType;
 import gr.netmechanics.epp.client.impl.commands.update.domain.DomainUpdateRequest;
 import gr.netmechanics.epp.client.impl.elements.ext.DomainExtension;
+import gr.netmechanics.epp.client.impl.elements.ext.SecDnsExtension;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -144,7 +147,7 @@ class DomainTests extends EppClientTestBase {
             .billingContacts(List.of("714_epp-client-b"))
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.createDomain(createRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().create(createRequest));
 
         assertThat(cmd.<DomainCreateResponse>getCreateResponse()).satisfies(create -> {
             assertThat(create).isNotNull();
@@ -159,7 +162,7 @@ class DomainTests extends EppClientTestBase {
             .domainName("epp-client-test1.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.getDomainInfo(infoRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().info(infoRequest));
 
         assertThat(cmd.<DomainInfoResponse>getInfoResponse()).satisfies(info -> {
             assertThat(info).isNotNull();
@@ -201,7 +204,7 @@ class DomainTests extends EppClientTestBase {
             .domainNames("epp-client.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkDomains(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().check(checkRequest));
 
         assertThat(cmd.<DomainCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -224,7 +227,7 @@ class DomainTests extends EppClientTestBase {
             .domainNames("epp-client.gr", "epp-client-test1.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkDomains(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().check(checkRequest));
 
         assertThat(cmd.<DomainCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -252,7 +255,7 @@ class DomainTests extends EppClientTestBase {
             .domainName("epp-client-test1.gr")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.getDomainInfo(infoRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.domains().info(infoRequest));
 
         DomainInfoResponse info = cmd.getInfoResponse();
         LocalDate currentExpirationDate = info.getAudit().getExpirationDate();
@@ -264,7 +267,7 @@ class DomainTests extends EppClientTestBase {
             .years(yearsToRenew)
             .build();
 
-        cmd = assertCommandSuccess(eppClient.renewDomain(renewRequest));
+        cmd = assertCommandSuccess(eppClient.domains().renew(renewRequest));
 
         assertThat(cmd.<DomainRenewResponse>getRenewResponse()).satisfies(renew -> {
             assertThat(renew).isNotNull();
@@ -285,7 +288,7 @@ class DomainTests extends EppClientTestBase {
             .nameServersToAdd(List.of("ns1.epp-client.gr", "ns2.epp-client.gr"))
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
 
         // reset state
         updateRequest = DomainUpdateRequest.builder()
@@ -295,7 +298,7 @@ class DomainTests extends EppClientTestBase {
             .nameServersToRemove(List.of("ns1.epp-client.gr", "ns2.epp-client.gr"))
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
     }
 
     @Test
@@ -306,7 +309,7 @@ class DomainTests extends EppClientTestBase {
             .changeOwner("714_epp-client-o")
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
     }
 
     @Test
@@ -317,6 +320,105 @@ class DomainTests extends EppClientTestBase {
             .changeOwnerName("714_epp-client-r")
             .build();
 
-        assertCommandSuccess(eppClient.updateDomain(updateRequest));
+        assertCommandSuccess(eppClient.domains().update(updateRequest));
+    }
+
+    @Test
+    @Order(18)
+    void test_domain_update_ds_marshalling() throws Exception {
+        var updateRequest = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .dsToAdd(List.of(new SecDnsExtension.DsData(12345, 3, 1, "ABCDEF1234567890")))
+            .dsToRemove(List.of(new SecDnsExtension.DsData(54321, 3, 1, "0987654321FEDCBA")))
+            .build();
+
+        String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
+        assertThat(xml).contains("<secDNS:add>");
+        assertThat(xml).contains("<secDNS:rem>");
+        assertThat(xml).contains("<secDNS:keyTag>12345</secDNS:keyTag>");
+        assertThat(xml).contains("<secDNS:keyTag>54321</secDNS:keyTag>");
+    }
+
+    @Test
+    @Order(19)
+    void test_domain_update_combined_extensions_marshalling() throws Exception {
+        var updateRequest = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .changeOwner("714_epp-client-r")
+            .dsToAdd(List.of(new SecDnsExtension.DsData(12345, 3, 1, "ABCDEF1234567890")))
+            .build();
+
+        String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
+
+        // Only one <extension> wrapper is allowed per EPP command; combined extensions must nest inside it.
+        assertThat(xml).containsOnlyOnce("<extension>").containsOnlyOnce("</extension>");
+        assertThat(xml).contains("<extdomain:op>ownerChange</extdomain:op>");
+        assertThat(xml).contains("<secDNS:add>");
+    }
+
+    @Test
+    @Order(20)
+    void test_domain_update_conflicting_operations_rejected() {
+        var builder = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .changeOwner("714_epp-client-r");
+
+        assertThatThrownBy(() -> builder.changeOwnerName("714_epp-client-o"))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessageContaining("Only one of issueToken/changeOwner/changeOwnerName");
+    }
+
+    @Test
+    @Order(21)
+    void test_domain_delete_recall_marshalling() throws Exception {
+        var deleteRequest = DomainDeleteRequest.builder()
+            .domainName("epp-client-test1.gr")
+            .deleteOperation(DeleteOperation.RECALL, "33223")
+            .build();
+
+        assertThat(xmlUtil.toXml(request(deleteRequest, eppProps.getClTrId())))
+            .isEqualTo(xmlUtil.xmlFromFile("domain_delete_recall_request.xml"));
+    }
+
+    @Test
+    @Order(22)
+    void test_domain_update_change_record_type_marshalling() throws Exception {
+        var updateRequest = DomainUpdateRequest.builder()
+            .domainName("ιτε.gr")
+            .changeRecordType(List.of(
+                new DomainExtension.RecordTypeChange("ίτε.gr", BundleRecordType.DOMAIN),
+                new DomainExtension.RecordTypeChange("ιτέ.gr", BundleRecordType.DNAME)))
+            .build();
+
+        String xml = xmlUtil.toXml(request(updateRequest, eppProps.getClTrId()));
+        assertThat(xml).contains("<domain:name>ιτε.gr</domain:name>");
+        assertThat(xml).doesNotContain("<domain:chg>");
+        assertThat(xml).contains("<extdomain:chg>");
+        assertThat(xml).contains("<extdomain:record>");
+        assertThat(xml).contains("<extdomain:recordType type=\"domain\">ίτε.gr</extdomain:recordType>");
+        assertThat(xml).contains("<extdomain:recordType type=\"dname\">ιτέ.gr</extdomain:recordType>");
+    }
+
+    @Test
+    @Order(23)
+    void test_domain_update_change_record_type_conflicting_operation_rejected() {
+        var builder = DomainUpdateRequest.builder()
+            .domainName("epp-client.gr")
+            .changeOwner("714_epp-client-r");
+
+        assertThatThrownBy(() -> builder.changeRecordType(List.of(
+                new DomainExtension.RecordTypeChange("epp-client.gr", BundleRecordType.DOMAIN))))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessageContaining("Only one of issueToken/changeOwner/changeOwnerName/changeRecordType");
+    }
+
+    @Test
+    @Order(24)
+    void test_domain_update_change_record_type_requires_non_empty_list() {
+        var builder = DomainUpdateRequest.builder().domainName("epp-client.gr");
+
+        assertThatThrownBy(() -> builder.changeRecordType(List.of()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("At least one record type change must be specified");
     }
 }

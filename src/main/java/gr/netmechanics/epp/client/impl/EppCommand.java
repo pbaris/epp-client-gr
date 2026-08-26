@@ -1,5 +1,6 @@
 package gr.netmechanics.epp.client.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -52,8 +53,10 @@ public class EppCommand {
     @JacksonXmlProperty(localName = "logout")
     private LogoutRequest logoutRequest;
 
+    @JacksonXmlElementWrapper(localName = "extension")
     @JacksonXmlProperty(localName = "extension")
-    private ExtensionNode extension;
+    @JsonSerialize(contentUsing = ExtensionSerializer.class)
+    private List<EppExtension> extensions;
 
     @JacksonXmlProperty(localName = "clTRID")
     private String clientTransactionId;
@@ -87,16 +90,14 @@ public class EppCommand {
             this.logoutRequest = r;
         }
 
-        if (request instanceof HasExtension r && r.getExtension() != null) {
-            extension = new ExtensionNode(r.getExtension());
+        if (request instanceof HasExtension r) {
+            List<EppExtension> exts = r.getExtensions();
+            if (!exts.isEmpty()) {
+                this.extensions = exts;
+            }
         }
 
         Optional.ofNullable(EppRequestType.fromInstance(request))
             .ifPresent(type -> this.clientTransactionId = type.name() + '-' + cti);
-    }
-
-    private record ExtensionNode(
-        @JsonSerialize(using = ExtensionSerializer.class)
-        EppExtension cmdExtension) {
     }
 }

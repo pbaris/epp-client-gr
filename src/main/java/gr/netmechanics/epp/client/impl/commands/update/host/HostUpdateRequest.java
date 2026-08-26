@@ -69,12 +69,12 @@ public class HostUpdateRequest implements HostSchema, UpdateRequest {
         }
 
         public HostUpdateRequestBuilder addressesToAdd(final List<String> addresses) {
-            this.addressesAdd = addresses;
+            this.addressesAdd = addresses != null ? List.copyOf(addresses) : null;
             return this;
         }
 
         public HostUpdateRequestBuilder addressesToRemove(final List<String> addresses) {
-            this.addressesRemove = addresses;
+            this.addressesRemove = addresses != null ? List.copyOf(addresses) : null;
             return this;
         }
 

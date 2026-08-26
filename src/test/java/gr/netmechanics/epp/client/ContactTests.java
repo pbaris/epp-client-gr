@@ -90,7 +90,7 @@ class ContactTests extends EppClientTestBase {
             .contactId("714_epp-client-r")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.getContactInfo(infoRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.contacts().info(infoRequest));
 
         assertThat(cmd.<ContactInfoResponse>getInfoResponse()).satisfies(info -> {
             assertThat(info).isNotNull();
@@ -110,7 +110,7 @@ class ContactTests extends EppClientTestBase {
             .contactIds("714_epp-client-r")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkContacts(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.contacts().check(checkRequest));
 
         assertThat(cmd.<ContactCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -135,7 +135,7 @@ class ContactTests extends EppClientTestBase {
             .contactIds("714_epp-client-a", "714_epp-client-f")
             .build();
 
-        EppCommandResponse cmd = assertCommandSuccess(eppClient.checkContacts(checkRequest));
+        EppCommandResponse cmd = assertCommandSuccess(eppClient.contacts().check(checkRequest));
 
         assertThat(cmd.<ContactCheckResponse>getCheckResponse()).satisfies(check -> {
             assertThat(check).isNotNull();
@@ -172,6 +172,6 @@ class ContactTests extends EppClientTestBase {
                     .countryCode("GR")))
             .build();
 
-        assertCommandSuccess(eppClient.updateContact(updateRequest));
+        assertCommandSuccess(eppClient.contacts().update(updateRequest));
     }
 }

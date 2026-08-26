@@ -22,7 +22,7 @@ import lombok.Setter;
 @Setter(AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class EppResponseData {
+class EppResponseData {
 
     @JsonDeserialize(using = InfoResponseDeserializer.class)
     @JacksonXmlProperty(localName = "infData")
