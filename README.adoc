@@ -94,26 +94,43 @@ won't survive across requests and every command will silently fail to stay authe
 
 Inject/Autowire the EppClient to your code. Commands are grouped by object type:
 
+.Domains — `eppClient.domains()`
 [source,java]
 ----
-eppClient.domains().check(DomainCheckRequest.builder().domainNames("example.gr").build());
-eppClient.hosts().info(HostInfoRequest.builder().hostName("ns1.example.gr").build());
-eppClient.contacts().create(ContactCreateRequest.builder()
-        .contactId("gr12345")
-        .email("info@example.gr")
-        .localPostalInfo(PostalInfo.builder()
-                .name("John Doe")
-                .address(Address.builder()
-                        .city("Athens")
-                        .postalCode("12345")
-                        .stateOrProvince("Attica")
-                        .countryCode("GR")))
-        .build());
-eppClient.registrar().info(new RegistrarInfoRequest());
+eppClient.domains().check(DomainCheckRequest.builder()
+    .domainNames("example.gr")
+    .build());
 ----
 
-Session management (`login`, `logout`, `hello`) stays directly on `EppClient` and is handled
-automatically — you don't need to call it yourself in normal use.
+.Hosts — `eppClient.hosts()`
+[source,java]
+----
+eppClient.hosts().info(HostInfoRequest.builder()
+    .hostName("ns1.example.gr")
+    .build());
+----
+
+.Contacts — `eppClient.contacts()`
+[source,java]
+----
+eppClient.contacts().create(ContactCreateRequest.builder()
+    .contactId("gr12345")
+    .email("info@example.gr")
+    .localPostalInfo(PostalInfo.builder()
+        .name("John Doe")
+        .address(Address.builder()
+            .city("Athens")
+            .postalCode("12345")
+            .stateOrProvince("Attica")
+            .countryCode("GR")))
+    .build());
+----
+
+.Registrar — `eppClient.registrar()`
+[source,java]
+----
+eppClient.registrar().info(new RegistrarInfoRequest());
+----
 
 == Implementation Status
 
