@@ -24,6 +24,15 @@
 - [2026-08-13] `.superpowers/sdd/**` task/report files are gitignored (see
   `.superpowers/sdd/.gitignore`), so edits there never show in `git status`/`git diff` — that's
   expected, not a sign the edit failed.
+- [2026-08-27] Response POJOs / nested XML classes MUST be Jackson-deserializable: give every
+  class a no-arg constructor (`@NoArgsConstructor(access = AccessLevel.PRIVATE)`) and non-final
+  fields. The `XmlMapper` (see `config/XmlMapperConfiguration`) sets `FIELD` visibility `ANY`, so
+  no setters are needed, but a class whose only constructor takes args (esp. an arg whose type
+  differs from the field, like an enum) leaves Jackson with no usable creator ->
+  `InvalidDefinitionException` at unmarshal. `@JacksonXmlText` makes this stricter (text = property
+  name `""`, must bind via creator if a parameterized creator is the sole creator). Working
+  reference pattern: `SecDnsExtension.DsData`, `Bundle.BundleName`. A public arg constructor for
+  request-building can coexist with the private no-arg one (as in `DomainExtension`).
 
 ## Do-Not-Repeat
 

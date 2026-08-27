@@ -63,12 +63,14 @@ public class DomainExtension implements DomainExtSchema, EppExtension {
     }
 
     @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class RecordTypeChange {
         @JacksonXmlText
-        private final String bundleName;
+        private String bundleName;
 
         @JacksonXmlProperty(isAttribute = true, localName = "type")
-        private final String type;
+        private String type;
 
         public RecordTypeChange(final String bundleName, final BundleRecordType type) {
             this.bundleName = bundleName;
